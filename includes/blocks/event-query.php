@@ -102,11 +102,7 @@ function ept_event_query_render_cb($atts) {
                 >
                 <button class="heart-button"> 
                     <i class="bi bi-heart favorite"></i>
-                  </button>
-                  <button class="cart-button">
-                      <i class="bi bi-cart2"></i>
-                  </button>
-
+                </button>
                 </div>
               </div>
             </div>

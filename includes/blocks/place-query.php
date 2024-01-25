@@ -67,13 +67,24 @@ function ept_place_query_render_cb($atts) {
 
           ?>
           <div class ="single-post">
+     
+              <div class ="button-data post-buttons"
+                data-logged-in="<?php echo is_user_logged_in(); ?>"
+                data-post-id="<?php echo $postID; ?>"
+                data-user-id="<?php echo $userID; ?>"
+                data-is-favorite="<?php echo $isFavorite; ?>"
+              >
+                <button class="heart-button"> 
+                  <i class="bi bi-heart favorite"></i>
+                </button>
+              </div>
             <div class ="image-container">
               <a class ="single-post-image" href= "<?php the_permalink(); ?>">
                 <?php the_post_thumbnail('thumbnail'); ?>
               </a>
             </div>
             <div class ="single-post-detail">
-              <a href="<?php the_permalink(); ?>">
+              <a class ="post-title" href="<?php the_permalink(); ?>">
                 <?php the_title(); ?>
               </a>
               <div class = "button-aligner">
@@ -81,20 +92,6 @@ function ept_place_query_render_cb($atts) {
                   <span class="place-location">
                     <?php  _e("Location : ",'e-potis'); echo($location); ?>
                   </span>
-                </div>
-                <div class ="button-data post-buttons"
-                  data-logged-in="<?php echo is_user_logged_in(); ?>"
-                  data-post-id="<?php echo $postID; ?>"
-                  data-user-id="<?php echo $userID; ?>"
-                  data-is-favorite="<?php echo $isFavorite; ?>"
-                >
-                <button class="heart-button"> 
-                    <i class="bi bi-heart favorite"></i>
-                  </button>
-                  <button class="cart-button">
-                      <i class="bi bi-cart2"></i>
-                  </button>
-
                 </div>
               </div>
             </div>

@@ -61,7 +61,7 @@
   min-height: 180px;
   max-height: 430px;
   background-color: white;
-  border-radius:2rem;
+  border-radius:2rem; 
 }
 
 .wp-block-ept-pe-event-query .image-container {
@@ -160,17 +160,19 @@ grid-gap: 16px;
   margin-top:2rem;
 }
 .wp-block-ept-pe-event-query .post-buttons .heart-button{
-margin-top:.4rem;
+  position: relative;
+  top: 0.5rem;
+  right: 0.5rem;
 }
 
 .wp-block-ept-pe-event-query .post-buttons .favorite{
-  background-color: white;
+  background-color: inherit;
 }
 .wp-block-ept-pe-event-query .post-buttons > button{
+
   justify-content: right;
   font-size:2rem;
   margin-right:1rem;
-  float:right;
   background-color: white;
 }
 
