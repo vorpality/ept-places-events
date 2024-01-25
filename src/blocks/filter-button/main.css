@@ -1,0 +1,43 @@
+.wp-block-ept-pe-filter-button .filter-wrapper {
+  max-width: fit-content;
+}
+
+
+.wp-block-ept-pe-filter-button .filter-button {
+  border-radius:50%;
+  color:inherit;
+  background:inherit;
+  font-size:2rem;
+  margin-left:1rem;
+  padding-left: 0.5rem;
+  padding-top: 0.2rem;
+  padding-right: 0.5rem;
+}
+
+.wp-block-ept-pe-filter-button .filter-menu {
+  padding-top:2rem;
+  padding-left:1rem;
+  display: block;
+  position: fixed;
+  overflow: hidden;
+  width: 400px;
+  left:-400px;
+  height: 100%;
+  top:0px;
+}
+
+.wp-block-ept-pe-filter-button .show-filter {
+  display:block;
+  position: fixed;
+  left: 0px;
+  top:0px;
+  width: 30%;
+  height: 100%;
+  transition: .5s;
+  background:white;
+}
+
+.wp-block-ept-pe-filter-button .filter-wrapper:hover .filter-button {
+  border-radius:10rem;
+  background: white;
+}

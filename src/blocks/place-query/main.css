@@ -1,0 +1,210 @@
+/*place
+ Query*/
+.wp-block-ept-pe-place-query {
+  --tw-bg-opacity: 1;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  margin-top: 0 !important;
+}
+.wp-block-ept-pe-place-query .inner-page-header {
+  width: 100%;
+  padding-bottom:2rem;
+  text-align:center;
+}
+@media (max-width: 640px){
+  .wp-block-ept-pe-place-query .inner-page-header {
+    text-align:center;
+  }
+}
+@media (min-width: 640px) {
+  .wp-block-ept-pe-place-query .inner-page-header {
+    max-width: 640px
+  }
+}
+@media (min-width: 768px) {
+  .wp-block-ept-pe-place-query .inner-page-header {
+    max-width: 768px
+  }
+}
+@media (min-width: 1024px) {
+  .wp-block-ept-pe-place-query .inner-page-header {
+    max-width: 1024px
+  }
+}
+@media (min-width: 1280px) {
+  .wp-block-ept-pe-place-query .inner-page-header {
+    max-width: 1280px
+  }
+}
+@media (min-width: 1536px) {
+  .wp-block-ept-pe-place-query .inner-page-header {
+    max-width: 1536px
+  }
+}
+.wp-block-ept-pe-place-query .inner-page-header {
+  margin-left: auto;
+  margin-right: auto
+}
+.wp-block-ept-pe-place-query h1 {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 500;
+  padding: 0;
+}
+
+.wp-block-ept-pe-place-query .single-post {
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  min-height: 180px;
+  max-height: 430px;
+  background-color: white;
+  border-radius:2rem;
+}
+
+.wp-block-ept-pe-place-query .image-container {
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  height: 50%;
+  margin-top:3rem;
+}
+
+.wp-block-ept-pe-place-query .single-post-image {
+flex-shrink: 0;
+}
+.wp-block-ept-pe-place-query .single-post-image img {
+width: 230px;
+height: 230px;
+border-radius: 0.5rem;
+}
+.wp-block-ept-pe-place-query .single-post-detail {
+margin-left: 1rem;
+font-size: 1.275rem;
+line-height: 1.25rem; 
+margin-top: 2rem;
+
+}
+.wp-block-ept-pe-place-query .single-post-detail > a {
+display: block;
+font-weight: 600;
+font-size:1.5rem;
+color:var(--wp--preset--color--pk-highlight-green);
+
+}
+.wp-block-ept-pe-place-query .single-post-detail > span {
+--tw-text-opacity: 1;
+color: rgb(107 114 128 / var(--tw-text-opacity));
+display:inline-block;
+margin-top:1.75rem;
+
+}
+.wp-block-ept-pe-place-query .posts {
+display:grid;
+max-width:  95%;
+margin:auto;
+grid-template-columns: repeat(5, minmax(220px, 1fr));
+grid-gap: 16px;
+}
+
+@media(max-width:1535px){
+.wp-block-ept-pe-place-query .posts {
+  display:grid;
+  max-width:  90%;
+  margin:auto;
+  grid-template-columns: repeat(4, minmax(220px, 1fr));
+  grid-gap: 16px;
+}
+}
+
+@media(max-width:1300px){
+.wp-block-ept-pe-place-query .posts {
+  display:grid;
+  max-width:  90%;
+  margin:auto;
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+  grid-gap: 16px;
+}
+}
+
+@media (max-width:1050px){
+  .wp-block-ept-pe-place-query .posts {
+  display:grid;
+  max-width:  90%;
+  margin:auto;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  grid-gap: 16px;
+}
+}
+
+@media (max-width:640px){
+.wp-block-ept-pe-place-query .posts {
+display:grid;
+max-width:  90%;
+margin:auto;
+grid-template-columns: repeat(1, minmax(220px, 1fr));
+grid-gap: 16px;
+}
+}
+.wp-block-ept-pe-place-query .single-post-detail .post-buttons{
+  display:flex;
+  float:right;
+  padding-right:0rem;
+  margin-top:2rem;
+}
+.wp-block-ept-pe-place-query .post-buttons .heart-button{
+margin-top:.4rem;
+}
+
+.wp-block-ept-pe-place-query .post-buttons .favorite{
+  background-color: white;
+}
+.wp-block-ept-pe-place-query .post-buttons > button{
+  justify-content: right;
+  font-size:2rem;
+  margin-right:1rem;
+  float:right;
+  background-color: white;
+}
+
+.wp-block-ept-pe-place-query .posts  .button-data > button:hover{
+color: red;
+}
+
+.wp-block-ept-pe-place-query .is-favorite   {
+  color: red ;
+}
+
+.wp-block-ept-pe-place-query .is-favorite  :hover{
+color: black ;
+}
+
+.wp-block-ept-pe-place-query .single-post-detail .place-info{
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity));
+  display:flex;
+  float:left;
+  flex-direction: column;
+  font-size:2rem;
+  margin-top:0.55rem;
+  
+  
+}
+
+.wp-block-ept-pe-place-query .single-post-detail .place-location{
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity));
+  display:flex;
+  float:left;
+  font-size:1.2rem;
+  padding-top:1rem;
+  
+  
+}

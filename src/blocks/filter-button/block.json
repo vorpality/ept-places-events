@@ -1,0 +1,33 @@
+{
+  "$schema": "https://raw.githubusercontent.com/WordPress/gutenberg/trunk/schemas/json/block.json",
+  "apiVersion": 2,
+  "name": "ept-pe/filter-button",
+  "title": "Filter Button",
+  "category": "text",
+  "description": "Adds a filter button with a customizable filter menu",
+  "textdomain": "e-potis",
+  "attributes": {
+    "field_number":{
+      "type" : "number",
+      "default":2
+    },
+    "content":{
+      "type": "array",
+      "default": [
+        {
+          "field_name" : "Field 1",
+          "type" : "slider",
+          "min" : 0,
+          "max" : 10
+        },
+        {
+          "field_name" : "Field 2",
+          "type" : "checkbox"
+        }
+      ]
+    }
+  },
+  "editorScript": "file:./index.js",
+  "style": "file:./index.css",
+  "viewScript": "file:./frontend.js"
+}

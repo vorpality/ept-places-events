@@ -1,0 +1,27 @@
+<?php
+
+function ept_pe_register_blocks() {
+    $blocks = [
+        [ 'name' => 'event-query', 'options' => [
+            'render_callback' => 'ept_event_query_render_cb'
+        ]],
+        [ 'name' => 'place-query', 'options' => [
+            'render_callback' => 'ept_place_query_render_cb'
+        ]],
+        [ 'name' => 'filter-button', 'options' => [
+            'render_callback' => 'ept_pe_filter_button_render_cb'
+        ]],
+        [ 'name' => 'locator'],
+        [ 'name' => 'single-place-details', 'options' => [
+            'render_callback' => 'ept_products_single_place_details_render_cb'
+        ]],
+        
+    ];
+ 
+    foreach($blocks as $block){
+        register_block_type(
+            EPT_PE_PLUGIN_DIR . 'build/blocks/'. $block['name'] .'/block.json',
+            isset($block['options']) ? $block['options'] : []
+        );
+    } 
+} 

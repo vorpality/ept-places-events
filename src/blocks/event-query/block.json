@@ -1,0 +1,43 @@
+{
+  "$schema": "https://raw.githubusercontent.com/WordPress/gutenberg/trunk/schemas/json/block.json",
+  "apiVersion": 2,
+  "name": "ept-pe/event-query",
+  "title": "Event Query",
+  "category": "text",
+  "description": "Adds an event post block",
+  "textdomain": "e-potis",
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "category"
+    },
+    "count": {
+      "type": "number",
+      "default": 10
+    },
+    "categories": {
+      "type": "array",
+      "default": []
+    },
+    "view": { 
+      "type":"string",
+      "default":"normal view"
+    },
+    "showCategory" : {
+      "type":"boolean",
+      "default":false
+    },
+    "cartEnabled" : {
+      "type":"boolean",
+      "default":true
+    },
+    "content":{
+      "type": "string",
+      "default": ""
+    }
+  },
+  "editorScript": "file:./index.js",
+  "style": "file:./index.css",
+  "viewScript": "file:./frontend.js" 
+
+}

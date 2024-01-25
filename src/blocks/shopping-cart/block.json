@@ -1,0 +1,39 @@
+{
+  "$schema": "https://raw.githubusercontent.com/WordPress/gutenberg/trunk/schemas/json/block.json",
+  "apiVersion": 2,
+  "name": "ept-products/shopping-cart",
+  "title": "Product cart block",
+  "category": "text",
+  "description": "Adds a block for the shopping cart page",
+  "textdomain": "e-potis",
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "Your cart"
+    },
+    "count": {
+      "type": "number",
+      "default": 10
+    },
+    "categories": {
+      "type": "array",
+      "default": []
+    },
+    "onlyFavorites": {
+      "type":"boolean",
+      "default":false
+    },
+    "showCategory" : {
+      "type":"boolean",
+      "default":false 
+    },
+    "content":{
+      "type": "string",
+      "default": ""
+    }
+  },
+  "editorScript": "file:./index.js", 
+  "style": "file:./index.css",
+  "viewScript": "file:./frontend.js" 
+
+}

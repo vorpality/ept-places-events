@@ -1,0 +1,17 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 2,
+    "name": "ept-pe/locator",
+    "title" : "locator",
+    "category" : "widgets",
+    "icon" : "star-filled",
+    "description": "Adds a button to change the html lang attribute",
+    "keywords": ["navigation", "underline", "hover"],
+    "version":"1",
+    "textdomain":"e-potis",
+
+    "editorScript":"file:./index.js",
+    "viewScript":"file:./frontend.js",
+    "style":"file:./index.css"
+          
+}

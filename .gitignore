@@ -1,0 +1,14 @@
+#build
+/build
+
+#npm stuff
+/node_modules
+
+#general stuff
+/index.php
+/package-lock.json
+/package.json
+
+#translations?
+/languages
+
