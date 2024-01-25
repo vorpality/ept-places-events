@@ -1,0 +1,12 @@
+.remove_image_button{
+  color:red;
+
+}
+
+#place_images_upload_btn{
+  border-radius:1rem;
+}
+
+.image-preview{
+  margin:.5rem;
+}

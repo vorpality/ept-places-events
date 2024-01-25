@@ -4,6 +4,6 @@ export default {
   ...defaultConfig,
   entry: {
     ...defaultConfig.entry(),
-    "admin/index": "./src/admin",
+    "admin/index": "./src/admin"
   }
 }   

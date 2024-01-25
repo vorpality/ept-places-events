@@ -1,3 +1,67 @@
+import './main.css';
+
+document.addEventListener('DOMContentLoaded', () =>{
+  console.log('script loaded')
+  const uploadButton = document.getElementById('place_images_upload_btn');
+  if (uploadButton != null){
+    uploadButton.addEventListener('click', function() {
+      const mediaUploader = wp.media({
+        title: 'Select Images',
+        button: {
+          text: 'Use these images'
+        },
+        multiple: true
+      }).on('select', function() {
+        const attachments = mediaUploader.state().get('selection').map(function(attachment) {
+          console.log(attachment);
+          attachment.toJSON();
+          console.log(attachment)
+          return attachment;
+        });
+
+        const imageContainer = document.getElementById('image-preview-wrapper');
+        console.log(imageContainer)
+        attachments.forEach(function(attachment) {
+          const div = document.createElement('div');
+          div.id = 'image-'+attachment.id;
+          div.className = "image-preview";
+
+          const img = document.createElement('img');
+          img.src = attachment.attributes.url;
+          img.style.width = '150px';
+          img.style.height = '150px';
+
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = 'place_images[]';
+          input.value = attachment.id;
+
+          const removeBtn = document.createElement('a');
+          removeBtn.href = "#";
+          removeBtn.className="remove_image_Button";
+          removeBtn.innerHTML="Remove";
+
+          imageContainer.appendChild(div);
+          div.appendChild(img);
+          div.appendChild(input);
+          div.appendChild(removeBtn);
+        });
+
+      }).open()
+    });
+  }
+  const remove_images = document.querySelectorAll(".remove_image_button");
+  if (remove_images != null){
+    remove_images.forEach(element => {
+      element.addEventListener('click', (event) => {
+        event.preventDefault();
+        const root = element.parentElement;
+        root.remove();
+      })
+      
+    });
+  }
+
 var autocomplete;
 const field = document.getElementById('location-input');
 if (field != null) {
@@ -28,3 +92,4 @@ if (field != null) {
   document.head.appendChild(script);
 }
 
+});

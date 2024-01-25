@@ -5,7 +5,6 @@
 /node_modules
 
 #general stuff
-/index.php
 /package-lock.json
 /package.json
 

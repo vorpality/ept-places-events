@@ -3,8 +3,6 @@
 function ept_pe_event_add_location($post){
   $oldLocation = get_post_meta($post->ID, 'event_location', true);
   $oldPlaceId = get_post_meta($post->ID, 'event_place_id', true);
-
-  // Fetch places from your 'place' custom post type
   $places = get_posts(array('post_type' => 'place', 'numberposts' => -1));
 
   ?>

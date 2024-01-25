@@ -40,7 +40,7 @@ function FavoritePost(props){
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  const blocks = document.querySelectorAll('.post-buttons')
+  const blocks = document.querySelectorAll('.wp-block-ept-pe-place-query .post-buttons')
   
   blocks.forEach( block => {
   const postID = parseInt(block.dataset.postId)
