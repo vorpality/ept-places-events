@@ -1,12 +1,53 @@
 .remove_image_button{
-  color:red;
-
+  background-color: white;
+  color: red;
+  position: relative;
+  top: -150px;
+  left: 120px;
+  width:fit-content;
+  height: auto;
+  border-radius: 3rem;
+  border:0px;
 }
 
+.remove_image_button .bi-x{
+  display:inline-block;
+  font-size: 1.2rem;
+}
+
+.remove_image_button:hover .bi-x{
+  cursor: pointer;
+  color: rgb(255,0,0,0.5);
+}
 #place_images_upload_btn{
   border-radius:1rem;
 }
 
+#image-preview-wrapper{
+  display:flex;
+  justify-content: flex-start;
+}
+
 .image-preview{
   margin:.5rem;
+  display:flex;
+  flex-direction: column;
+}
+
+.image-details{
+  display:flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: flex-end;
+}
+
+.image-preview-wrapper .image-details .primary-checkbox{
+  height:16px ;
+  margin:0;
+}
+.image-preview>img{
+  width:150px;
+  height:150px;
+  max-width: 150px;
+  max-height: 150px;
 }
