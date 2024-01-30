@@ -7,73 +7,105 @@ import {
   MediaUpload,MediaUploadCheck
 } from "@wordpress/block-editor";
 
-function ImagePreview({id, url}){
-  const [image_id, set_image_id] = useState(id);
-  const [image_url, set_image_url] = useState(url);
-  //const [primary_image, set_primary_image] = useState(primary_image_id);
-  const [removed, set_removed] = useState(false);
+function ImagesManager() {
+  const rootElement = document.getElementById('image-upload-root');
+  const initialImages = JSON.parse(rootElement.dataset.images || '[]');
+  const [images, setImages] = useState(initialImages);
+  const [primaryImageId, setPrimaryImageId] = useState(
+    initialImages.find(image => image.isPrimary)?.id || null
+  );
+  const addNewImages = (newImages) => {
+    const uniqueNewImages = newImages.filter(newImage => 
+      !images.some(existingImage => parseInt(existingImage.id, 10) === newImage.id)
+    );
+    setImages([...images, ...uniqueNewImages]);
+  };
 
-  const handle_image_remove = (id) =>{
-    console.log('id = ' + id)
-    console.log('image id = ' + image_id) 
-    console.log(removed);
-    set_removed(true);
-    console.log(removed)
+  window.addNewImagesToUploader = addNewImages;
 
-  }
+  // Handle removing an image
+  const removeImage = (id) => {
+    const new_images = images.filter(image => image.id !== id);
+    setImages(new_images);
 
-  console.log(image_url)
+    if (primaryImageId === id) {
+      if (new_images.length > 0) {
+        setPrimaryImageId(new_images[0].id);
+      } else {
+        setPrimaryImageId(null);
+      }
+    }
+  };
 
-  if (removed) 
-    return <></>
+  // Handle setting an image as primary
+  const setPrimaryImage = (id) => {
+    setPrimaryImageId(id);
+  };
 
   return (
-    <>
-    <img 
-      src={image_url} 
-    />
-    <button
-      type = "button"
-      className="remove_image_button"
-      onClick={() => handle_image_remove(image_id)}
-    >
-      <i className="bi bi-x"></i>
-    </button>
-    <div className = "image-details">
-      <label> {__('Primary image', 'e-potis')}</label>
-      <input 
-        type = "checkbox" 
-        className = "primary-checkbox"
-        name ="primary_image" 
-        //checked = {is_primary == image_id}
-        //onChange={() => handle_primary_change()}
-      ></input>
+    <div>
+      <div id="image-preview-wrapper">
+        {images.map(image => (
+          <ImagePreview
+            key={image.id}
+            id={image.id}
+            url={image.url}
+            isPrimary={image.id === primaryImageId}
+            onRemove={() => removeImage(image.id)}
+            onSetPrimary={() => setPrimaryImage(image.id)}
+          />
+        ))}
+      </div>
+      {images.map(image => (
+        <input key={image.id} type="hidden" name="place_images[]" value={image.id} />
+      ))}
+      {primaryImageId && <input type="hidden" name="primary_image" value={primaryImageId} />}
     </div>
-    </>
-  )
+  );
+}
+export default ImagesManager;
+
+function ImagePreview({ id, url, isPrimary, onRemove, onSetPrimary }) {
+  const [isChecked, setIsChecked] = useState(isPrimary);
+
+  // Update checkbox state when isPrimary changes
+  useEffect(() => {
+    setIsChecked(isPrimary);
+  }, [isPrimary]);
+
+  const handlePrimaryChange = () => {
+    if (!isChecked) {
+      onSetPrimary(id);
+    }
+  };
+
+  return (
+    <div className="image-preview">
+      <img src={url} />
+      <button className="remove_image_button" onClick={() => onRemove(id)}>
+        <i className="bi bi-x"></i>
+      </button>
+      <div className="image-details">
+        <label>Primary Image</label>
+        <input
+          type="checkbox"
+          className="primary-checkbox"
+          checked={isChecked}
+          onChange={handlePrimaryChange}
+        />
+      </div>
+    </div>
+  );
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+  const rootElement = document.getElementById('image-upload-root');
+  const root = createRoot(rootElement);
+  root.render(<ImagesManager />);
 
-document.addEventListener('DOMContentLoaded', () =>{
-  const images = document.querySelectorAll('.image-preview');
 
-  images.forEach(image => {
-    
-    const image_id = parseInt(image.dataset.image_id)
-    const image_url = image.dataset.image_url;
-    console.log(image_url)
-    const root = createRoot(image);
-    root.render(
-      <ImagePreview
-        id={image_id}
-        url={image_url}
-      />
-    )
-  })
-
-  
   const uploadButton = document.getElementById('place_images_upload_btn');
-  if (uploadButton != null){
+  if (uploadButton != null) {
     uploadButton.addEventListener('click', function() {
       const mediaUploader = wp.media({
         title: 'Select Images',
@@ -82,71 +114,16 @@ document.addEventListener('DOMContentLoaded', () =>{
         },
         multiple: true
       }).on('select', function() {
-        const attachments = mediaUploader.state().get('selection').map(function(attachment) {
-          attachment.toJSON();
-          return attachment;
-        });
+        const selectedAttachments = mediaUploader.state().get('selection').map(attachment => attachment.toJSON());
 
-        const imageContainer = document.getElementById('image-preview-wrapper');
-        attachments.forEach(function(attachment) {
-          const div = document.createElement('div');
-          div.id = 'image-'+attachment.id;
-          div.className = "image-preview";
-
-          const img = document.createElement('img');
-          img.src = attachment.attributes.url;
-          img.style.width = '150px';
-          img.style.height = '150px';
-
-          const input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = 'place_images[]';
-          input.value = attachment.id;
-
-          const removeBtn = document.createElement('a');
-          removeBtn.href = "#";
-          removeBtn.className="remove_image_Button";
-          removeBtn.innerHTML="Remove";
-
-
-          imageContainer.appendChild(div);
-          div.appendChild(img);
-          div.appendChild(input);
-          div.appendChild(removeBtn);
-
-          
-        });
-
-        imageContainer.addEventListener('change', function(event) {
-          console.log('change ' + event.target);
-          if (event.target.classList.contains('primary-checkbox')) {
-            const checkboxes = document.querySelectorAll('.primary-checkbox');
-            checkboxes.forEach(cb => {
-              if(cb !== event.target) {
-                cb.checked = false;
-              }
-            });
-            const primaryInput = document.getElementById('primary_image_input');
-            primaryInput.value = event.target.checked ? event.target.value : '';
-          }
-        });
-
-      }).open()
+        // Use the exposed function to update React state
+        if (window.addNewImagesToUploader) {
+          window.addNewImagesToUploader(selectedAttachments);
+        }
+      }).open();
     });
   }
-  /*
-  const remove_images = document.querySelectorAll(".remove_image_button");
-  if (remove_images != null){
-    remove_images.forEach(element => {
-      element.addEventListener('click', (event) => {
-        event.preventDefault();
-        const root = element.parentElement;
-        root.remove();
-      })
-      
-    });
-  }*/
-  
+
 
 
 var autocomplete;
