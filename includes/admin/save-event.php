@@ -72,6 +72,8 @@ function ept_pe_place_publish_place_images($new_status, $old_status, $post) {
 //print_r($_POST);
 //exit();
   if ( $new_status == 'publish') {
+    $primary_image = isset($_POST['primary_image']) ? $_POST['primary_image'] : '';
+    add_post_meta($post->ID, 'primary_image', sanitize_text_field($primary_image));
     $new_images = isset($_POST['place_images']) ? $_POST['place_images'] : '';
     delete_post_meta($post->ID, 'place_images');
     if (!empty($new_images)) {

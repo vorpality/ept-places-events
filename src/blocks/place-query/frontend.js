@@ -17,7 +17,7 @@ function FavoritePost(props){
         }
 
         const favResponse = await apiFetch({ 
-          //example.com/wp-json/ept/v1/favorite
+          //example.com/wp-json/ept/v1/favorite 
           path: 'ept/v1/favorite',
           method: 'POST',
           data: {
