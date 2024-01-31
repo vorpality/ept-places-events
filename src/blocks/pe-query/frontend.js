@@ -17,7 +17,7 @@ function ImageScroller({ imageUrls,postUrl }) {
     <>
       {currentImageIndex > 0 && (
         <button onClick={handlePrevClick} className="arrow left-arrow">
-          <i clasName="bi bi-arrow-left"></i>
+          <i className="bi bi-arrow-left"></i>
         </button>
       )} 
       <a href = {url}>
