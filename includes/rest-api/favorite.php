@@ -1,5 +1,5 @@
 <?php
-function ept_pq_rest_api_add_favorite_handler1($request){
+function ept_pe_rest_api_add_favorite_handler($request){
   $response['status'] = 1;
   $params = $request->get_json_params();
 

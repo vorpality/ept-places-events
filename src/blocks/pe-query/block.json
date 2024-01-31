@@ -1,0 +1,43 @@
+{
+    "$schema": "https://raw.githubusercontent.com/WordPress/gutenberg/trunk/schemas/json/block.json",
+    "apiVersion": 2,
+    "name": "ept-pe/query",
+    "title": "PE Query",
+    "category": "widgets",
+    "description": "A block to query and display places and events.",
+    "textdomain": "e-potis",
+    "attributes": {
+      "queryType": {
+        "type": "string",
+        "default": "places"
+      },
+      "title": {
+        "type": "string",
+        "default": "Category"
+      },
+      "count": {
+        "type": "number",
+        "default": 10
+      },
+      "categories": {
+        "type": "array",
+        "default": []
+      },
+      "view": {
+        "type": "string",
+        "default": "normal view"
+      },
+      "showCategory": {
+        "type": "boolean",
+        "default": false
+      },
+      "content": {
+        "type": "string",
+        "default": ""
+      } 
+    },
+    "editorScript": "file:./index.js",
+    "style": "file:./index.css",
+    "viewScript": "file:./frontend.js" 
+  }
+  
