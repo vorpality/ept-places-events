@@ -31,11 +31,14 @@ registerBlockType(block.name, {
       content
     } = attributes;
 
-    // Fetch terms for category selection
     const terms = useSelect((select) => {
-      return select('core').getEntityRecords('taxonomy', 'category', {
+      const eventCats = select('core').getEntityRecords('taxonomy', 'event_category', {
         per_page: -1
-      });
+      }) || [];      
+      const placeCats = select('core').getEntityRecords('taxonomy', 'place_category', {
+        per_page: -1
+      }) || [];
+      return [...eventCats, ...placeCats];
     }, []);
 
     // Prepare category options for QueryControls
@@ -53,7 +56,7 @@ registerBlockType(block.name, {
       <>
         <InspectorControls>
           <PanelBody title={__('Query Settings', 'e-potis')}>
-            <SelectControl
+          <SelectControl
               label={__('Query Type', 'e-potis')}
               value={queryType}
               options={[
@@ -63,15 +66,20 @@ registerBlockType(block.name, {
               ]}
               onChange={(value) => setAttributes({ queryType: value })}
             />
+            <SelectControl
+              label={__('View', 'e-potis')}
+              value={view}
+              options={[
+                { label: __('Everything', 'e-potis'), value: 'all view' },
+                { label: __('Favorites', 'e-potis'), value: 'favorites view' },
+                { label: __('Normal', 'e-potis'), value: 'normal view' }
+              ]}
+              onChange={(value) => setAttributes({ queryType: value })}
+            />
             <ToggleControl
               label={__('Show Category', 'e-potis')}
               checked={showCategory}
               onChange={(newShowCategory) => setAttributes({ showCategory: newShowCategory })}
-            />
-            <ToggleControl
-              label={__('Enable Cart', 'e-potis')}
-              checked={cartEnabled}
-              onChange={(newCartEnabled) => setAttributes({ cartEnabled: newCartEnabled })}
             />
             <QueryControls
               numberOfItems={count}

@@ -1,9 +1,7 @@
 <?php
 
 function ept_pe_query_render_cb($atts) {
-
   $title = esc_html($atts['title']);
-
   $userID = get_current_user_id();
   $userFavoritesString = get_user_meta($userID, 'favorites', false);
   $favoriteIDs = ($userFavoritesString)?  array_map('intval', $userFavoritesString) : [] ;
@@ -23,13 +21,13 @@ function ept_pe_query_render_cb($atts) {
     case ("favorites view"):
       $args = [
         'post__in'=> $favoriteIDs,
-        'post_type' => 'place',
+        'post_type' => array('place','event'),
         'posts_per_page' => $atts['count'],
       ];
       break;
     case ("all view"):
       $args = [
-        'post_type' => 'place',
+        'post_type' => array('place','event'),
         'posts_per_page' => $atts['count']
       ];
       break;
@@ -54,8 +52,8 @@ function ept_pe_query_render_cb($atts) {
 
       if (!empty($categoryIDs)) {
         foreach($categoryIDs as $cat)
-        $place_args['cat'] .= $cat .',' ;
-        $event_args['cat'] .= $cat .',' ;
+          $place_args['cat'] .= $cat .',' ;
+          $event_args['cat'] .= $cat .',' ;
       }
       break;
   }
