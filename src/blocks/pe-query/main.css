@@ -84,7 +84,7 @@
     line-height: 1.25rem;
     position: relative;
     top: -2.7rem;
-    background-color: white;
+    background-color: inherit;
     border-radius:1rem;
 }
 
@@ -112,7 +112,7 @@
     justify-content:center;
     max-width: 95%;
     margin: auto;
-    grid-template-columns: repeat(4, minmax(220px, 300px));
+    grid-template-columns: repeat(4, minmax(300px, 300px));
     grid-gap: 1rem;
     padding-left: calc((100vw - 300px * 4) / 2);
     padding-right: calc((100vw - 300px * 4) / 2); 
@@ -120,7 +120,7 @@
 
 @media (max-width: 1550px) {
     .wp-block-ept-pe-query .posts {
-        grid-template-columns: repeat(3, minmax(220px, 300px));
+        grid-template-columns: repeat(3, minmax(300px, 300px));
         padding-left: calc((100vw - 300px * 3) / 2); 
         padding-right: calc((100vw - 300px * 3) / 2); 
     }
@@ -128,7 +128,7 @@
 
 @media (max-width: 1050px) {
     .wp-block-ept-pe-query .posts {
-        grid-template-columns: repeat(2, minmax(220px, 300px));
+        grid-template-columns: repeat(2, minmax(300px, 300px));
         padding-left: calc((100vw - 300px * 2) / 2); 
         padding-right: calc((100vw - 300px * 2) / 2);
     }
@@ -136,7 +136,7 @@
 
 @media (max-width: 640px) {
     .wp-block-ept-pe-query .posts {
-        grid-template-columns: repeat(1, minmax(220px, 300px));
+        grid-template-columns: repeat(1, minmax(300px, 300px));
         padding-left: calc((100vw - 300px) / 2); 
         padding-right: calc((100vw - 300px) / 2);
     }
@@ -145,21 +145,21 @@
 /* Styles for Buttons and Interactions */
 .wp-block-ept-pe-query .post-buttons .heart-button {
     position: relative;
-    padding:1px;
-    width:43px;
-    height:43px;
+    padding:2px;
+    width:35px;
+    height:35px;
     left: 80%;
-    font-size: 2rem;
+    font-size: 1.5rem;
     margin-right: 1rem;
-    background-color: white;
+    background: rgba(255, 255, 255, 0.3);
     border-radius:2rem;
     z-index:2;
 }
 
 .wp-block-ept-pe-query .post-buttons .heart-button >i{
     position:relative;
-    bottom:0px;
-    left:0;
+    bottom:0;
+    left: 0;
 }
 .wp-block-ept-pe-query .is-favorite .favorite ,.wp-block-ept-pe-query .favorite:hover {
     color: red;
@@ -173,26 +173,23 @@
 
   
 .wp-block-ept-pe-query .single-post .arrow {
-    display:none;
     position: absolute;
     padding:.5rem;
     padding-top:0.2rem;
-    padding-bottom:0.2rem;
+    padding-bottom:0.11rem;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.8);
     border: none;
     cursor: pointer;
     font-size:1.3rem;
+    border-radius:0.6rem;
   }
 
   .wp-block-ept-pe-query .single-post .arrow:hover {
     background: rgba(255, 255, 255, 0.5);
   }
 
-  .wp-block-ept-pe-query .image-container:hover .arrow {
-    display: block;
-}
 
   .wp-block-ept-pe-query .single-post .left-arrow {
     left: 0;
@@ -201,3 +198,35 @@
   .wp-block-ept-pe-query .single-post .right-arrow {
     right: 0;
   }
+
+  .wp-block-ept-pe-query .single-post .image-dots{
+    position: absolute;
+    top:90%;
+    color:rgba(255, 255, 255, .6);
+    
+  }
+
+
+
+  .wp-block-ept-pe-query .single-post-image .image-dots .bi{
+    margin:1px;
+    background-color: inherit;
+    font-size:8px;
+  }
+
+  .wp-block-ept-pe-query .single-post-image .image-dots .bi:hover{
+    color:rgba(255, 255, 255, 1);
+  }
+
+  .wp-block-ept-pe-query .single-post .arrow,
+.wp-block-ept-pe-query .single-post .image-dots {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.wp-block-ept-pe-query .image-container:hover .arrow,
+.wp-block-ept-pe-query .image-container:hover .image-dots {
+  opacity: 1;
+  visibility: visible;
+}

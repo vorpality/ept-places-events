@@ -19,6 +19,10 @@ function ImagesManager() {
       !images.some(existingImage => parseInt(existingImage.id, 10) === newImage.id)
     );
     setImages([...images, ...uniqueNewImages]);
+    
+    if (!primaryImageId && uniqueNewImages.length > 0) {
+      setPrimaryImageId(uniqueNewImages[0].id);
+    }
   };
 
   window.addNewImagesToUploader = addNewImages;
@@ -57,7 +61,7 @@ function ImagesManager() {
         ))}
       </div>
       {images.map(image => (
-        <input key={image.id} type="hidden" name="place_images[]" value={image.id} />
+        <input key={image.id} type="hidden" name="custom_images[]" value={image.id} />
       ))}
       {primaryImageId && <input type="hidden" name="primary_image" value={primaryImageId} />}
     </div>
@@ -68,7 +72,6 @@ export default ImagesManager;
 function ImagePreview({ id, url, isPrimary, onRemove, onSetPrimary }) {
   const [isChecked, setIsChecked] = useState(isPrimary);
 
-  // Update checkbox state when isPrimary changes
   useEffect(() => {
     setIsChecked(isPrimary);
   }, [isPrimary]);
@@ -86,7 +89,7 @@ function ImagePreview({ id, url, isPrimary, onRemove, onSetPrimary }) {
         <i className="bi bi-x"></i>
       </button>
       <div className="image-details">
-        <label>Primary Image</label>
+        <label>{__('Primary Image' , 'e-potis')}</label>
         <input
           type="checkbox"
           className="primary-checkbox"
@@ -104,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
   root.render(<ImagesManager />);
 
 
-  const uploadButton = document.getElementById('place_images_upload_btn');
+  const uploadButton = document.getElementById('custom_images_upload_btn');
   if (uploadButton != null) {
     uploadButton.addEventListener('click', function() {
       const mediaUploader = wp.media({
@@ -116,7 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }).on('select', function() {
         const selectedAttachments = mediaUploader.state().get('selection').map(attachment => attachment.toJSON());
 
-        // Use the exposed function to update React state
         if (window.addNewImagesToUploader) {
           window.addNewImagesToUploader(selectedAttachments);
         }

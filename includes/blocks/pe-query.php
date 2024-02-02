@@ -77,25 +77,20 @@ function ept_pe_query_render_cb($atts) {
             $location_string_parts = explode(", ", trim($location, "()"));
             $location = $location_string_parts[1];
           }
-          $image_ids = get_post_meta($postID, 'place_images');
-          error_log(print_r($image_ids, true)); // Debugging line
-          
+          $image_ids = get_post_meta($postID, 'custom_images');
           $image_urls = [];
-          $thumbnail = get_post_meta($postID, 'primary_image', true);
-          $thumbnail = ($thumbnail == '')? '' : (int) $thumbnail;
           if (!empty($image_ids)) {
-              // Ensure $image_ids is an array
               if (!is_array($image_ids)) {
-                  $image_ids = explode(',', $image_ids); // Convert string to array
+                  $image_ids = explode(',', $image_ids);
               }
-
-              // Filter out empty values and ensure IDs are integers
               $image_ids = array_filter(array_map('intval', $image_ids));
-
               $image_urls = array_map(function($id) {
                   return wp_get_attachment_url($id);
               }, $image_ids);
           }
+          
+          $thumbnail = get_post_meta($postID, 'primary_image', true);
+          $thumbnail = ($thumbnail == '')? '' : (int) $thumbnail;
           
           if($userID)$isFavorite = in_array(strval($postID),$userFavoritesString) ? true : false ;
 
@@ -113,7 +108,7 @@ function ept_pe_query_render_cb($atts) {
                 </button>
               </div>
             <div class ="image-container">
-              <div class ="single-post-image image-root" ?>">
+              <div class ="single-post-image image-root">
                 <img src="<?php  echo (wp_get_attachment_url($thumbnail)); ?>" alt="">
               </div>
             </div>
@@ -158,10 +153,25 @@ function ept_pe_query_render_cb($atts) {
             $placeTitle = '';
             $placeUrl = '';
           }
+
+          $image_ids = get_post_meta($postID, 'custom_images');
+          $image_urls = [];
+          if (!empty($image_ids)) {
+              if (!is_array($image_ids)) {
+                  $image_ids = explode(',', $image_ids);
+              }
+              $image_ids = array_filter(array_map('intval', $image_ids));
+              $image_urls = array_map(function($id) {
+                  return wp_get_attachment_url($id);
+              }, $image_ids);
+          }
+          
+          $thumbnail = get_post_meta($postID, 'primary_image', true);
+          $thumbnail = ($thumbnail == '')? '' : (int) $thumbnail;
+          
           if($userID)$isFavorite = in_array(strval($postID),$userFavoritesString) ? true : false ;
           ?>
-          <div class ="single-post">
-          <p><?php echo!($placeID == '');?><p>
+          <div class ="single-post" data-image-urls='<?php echo json_encode($image_urls); ?>' data-post-url= '<?php the_permalink();?>'>
 
             <div class ="button-data post-buttons"
               data-logged-in="<?php echo is_user_logged_in(); ?>"
@@ -174,9 +184,9 @@ function ept_pe_query_render_cb($atts) {
               </button>
             </div>
             <div class ="image-container">
-              <a class ="single-post-image" href= "<?php the_permalink(); ?>">
-                <?php the_post_thumbnail('thumbnail'); ?>
-              </a>
+              <div class ="single-post-image image-root">
+                <img src="<?php  echo (wp_get_attachment_url($thumbnail)); ?>" alt="">
+              </div>
             </div>
             <div class ="single-post-detail">
               <a class ="post-title" href="<?php the_permalink(); ?>">
@@ -204,6 +214,7 @@ function ept_pe_query_render_cb($atts) {
   
   $output = ob_get_contents();
   ob_end_clean();
+
 
   return $output;
 }
