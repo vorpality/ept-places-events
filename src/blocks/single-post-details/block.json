@@ -1,11 +1,11 @@
 {
     "$schema": "https://raw.githubusercontent.com/WordPress/gutenberg/trunk/schemas/json/block.json",
     "apiVersion": 2,
-    "name": "ept-products/single-post-details",
+    "name": "ept-pe/single-post-details",
     "title": "Single Post Details",
     "category": "text",
-    "description": "Adds a favorite button,availability tag and a price",
-    "textdomain": "ept-products",
+    "description": "Adds a favorite button,and all needed info to render a single post",
+    "textdomain": "e-potis",
     "attributes": {
       "content":{
         "type": "string",

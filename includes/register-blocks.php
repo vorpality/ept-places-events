@@ -15,8 +15,8 @@ function ept_pe_register_blocks() {
             'render_callback' => 'ept_pe_filter_button_render_cb'
         ]],
         [ 'name' => 'locator'],
-        [ 'name' => 'single-place-details', 'options' => [
-            'render_callback' => 'ept_products_single_place_details_render_cb'
+        [ 'name' => 'single-post-details', 'options' => [
+            'render_callback' => 'ept_products_single_post_details_render_cb'
         ]],
         
     ];

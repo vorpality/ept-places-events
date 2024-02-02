@@ -1,231 +1,156 @@
-import {render, useState} from '@wordpress/element'
+
+import {render, useState, useEffect} from '@wordpress/element'
 import apiFetch from '@wordpress/api-fetch'
-import {__} from '@wordpress/i18n'
-import { Spinner } from '@wordpress/components'
+import { createRoot } from "react-dom/client";
+
+let map;
+
+function ImageScroller(props) {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [url] = useState(props.postUrl);
+  const [dots, setDots] = useState([]);
+
+  useEffect(() => {
+    const dotElements = props.imageUrls.map((_, index) => (
+      <button 
+        key={index} 
+        onClick = {() => setCurrentImageIndex(index) }
+      >
+        <img 
+          className = {` image-preview ${currentImageIndex === index ? 'active' :''} `}
+          src={props.imageUrls[index]} 
+          alt=""
+        />
+      </button>
+    ));
+    setDots(dotElements);
+  }, [currentImageIndex, props.imageUrls]);
+
+
+  const handlePrevClick = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : props.imageUrls.length - 1));
+  };
+
+
+
+  const handleNextClick = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % props.imageUrls.length);
+  };
+
+  return (
+    <>
+    <div className='image-container'>
+
+      <FavoritePost 
+        postID={props.postID} 
+        userID={props.userID}
+        isFavorite = {props.isFavorite}
+        loggedIn={props.loggedIn}
+      />
+      {currentImageIndex > 0 && (
+        <button onClick={handlePrevClick} className="arrow left-arrow">
+          <i className="bi bi-arrow-left"></i>
+        </button>
+      )} 
+      <a href = {url}>
+        <img src={props.imageUrls[currentImageIndex]} alt="" />
+      </a>
+      {currentImageIndex < props.imageUrls.length - 1 && (
+        <button onClick={handleNextClick} className="arrow right-arrow">
+          <i className="bi bi-arrow-right"></i>
+        </button>
+      )}
+    </div>
+    <div className = "image-preview-container">
+      {dots}
+    </div>
+    </>
+  );
+}
 
 function FavoritePost(props){
   const [permission] = useState(props.loggedIn)
   const [favorite, setFavorite] = useState(props.isFavorite)
-  const className = "favorite-button "+favorite ? "favorite-button is-favorite" : ""
+  const className = "heart-button "+favorite ? "heart-button is-favorite" : ""
   const fill = favorite ? "-fill" : ""
-  
-  return (    
-    <button class={className}
-      onClick = {async event => {
-
-        if(!permission) {
-          return alert('You may need to log in.')
-        }
-
-        const response = await apiFetch({
-          //example.com/wp-json/up/v1/favorite
-          path: 'up/v1/favorite',
-          method: 'POST',
-          data: {
-            userID: props.userID,
-            postID: props.postID,
-            favorite
-          }
-        })
-
-        if(response.status ==2) {
-          setFavorite(!favorite)
-        }
-      }}>
-    
-      <i class={`bi bi-heart${fill}`}></i>
-  </button>
-  )
-}
-
-function AddToCartSP(props){
-  const [permission] = useState(props.loggedIn)
-  const [inCart, setCart] = useState(props.inCart)
-  const [spinner, setSpinner] = useState(false)
-  const renderEl = [];
-  const [futureCart, setFutureCart] = useState(inCart);
-  let tmp;
-  if (inCart==0) { 
-    renderEl.push(
-      <>
-      {(spinner) ? <Spinner /> :
-        <button 
-          id = "solo-btn"
-          onClick = {async (event) => {
-
-            if(!permission) {
-              return alert('You may need to log in.')
-            }
-            setSpinner(true)
-            const response = await apiFetch({
-              //example.com/wp-json/up/v1/favorite
-              path: 'ept/v1/cartfiddle',
-              method: 'POST',
-              data: {
-                userID: props.userID,
-                postID: props.postID,
-                action:"add"
-              }
-            })
-            setSpinner(false);
-            if(response.status ==2) {
-              tmp = 1;
-              setCart(tmp);
-              setFutureCart(tmp)
-            }
-
-          }}
-        > 
-        { __('Add to cart', 'e-potis')}
-        </button>
-      }
-      </>
-    )
-  }
-  else {
-   renderEl.push(
-    <>
-    {spinner? '' :
-      <button
-        className="quantity-button quantity-minus"
+  return ( 
+    <div className ="post-buttons">
+      <button className={className}
         onClick = {async event => {
 
           if(!permission) {
             return alert('You may need to log in.')
           }
-          setSpinner(true)
-          const cartResponse = await apiFetch({
-            //example.com/wp-json/ept/v1/cartfiddle
-            path: 'ept/v1/cartfiddle',
+
+          const response = await apiFetch({
+            //example.com/wp-json/up/v1/favorite
+            path: 'ept/v1/favorite',
             method: 'POST',
             data: {
               userID: props.userID,
               postID: props.postID,
-              action: "remove"
+              favorite
             }
           })
-          setSpinner(false);
-          
-          if(cartResponse.status ==2) {
-            tmp = (inCart-1)
-            setCart(tmp);
-            setFutureCart(tmp);
+
+          if(response.status ==2) {
+            setFavorite(!favorite)
           }
         }}>
-        <i class="bi bi-dash-square quantity-button"></i>
-      </button>
-    }
-    </>
-    )
-    renderEl.push(
-      <>
-      {(spinner) ? <Spinner className="cart-spinner" /> :
-        <input 
-          type = "text"
-          class = "quantity-box"
-          value={futureCart}
-          data_user_id={props.userID}
-          data_post_id={props.postID}
-          onChange={(e) =>
-            {
-              setFutureCart(e.target.value)
-            }
-          }
-          onBlur= {async () =>{
-            tmp = (futureCart != parseInt(futureCart))? 0 : futureCart
-            setSpinner(true)
-            const cartResponse = await apiFetch({
-              //example.com/wp-json/ept/v1/cartfiddle
-              path: 'ept/v1/cartfiddle',
-              method: 'POST',
-              data: {
-                userID: props.userID,
-                postID: props.postID,
-                amount: tmp
-              }
-            })
-            
-            if(cartResponse.status ==2) {
-              setCart(tmp);
-              setFutureCart(tmp);
-            }
-            setSpinner(false)
+      <i className={`bi bi-heart${fill}`}></i>
+    </button>
+  </div>
 
-          }}
-        ></input>
-      }
-      </>
-    )
-    renderEl.push(
-      <>
-      {spinner ? '' :
-        <button 
-          className = "quantity-button quantity-plus"
-          onClick = {async event => {
-
-            if(!permission) {
-              return alert('You may need to log in.')
-            }
-            setSpinner(true)
-            const cartResponse = await apiFetch({
-              //example.com/wp-json/ept/v1/cartfiddle
-              path: 'ept/v1/cartfiddle',
-              method: 'POST',
-              data: {
-                userID: props.userID,
-                postID: props.postID,
-                action:"add"
-              }
-            })
-            setSpinner(false)
-            if(cartResponse.status ==2) {
-              tmp = (inCart+1)
-              setCart(tmp)
-              setFutureCart(tmp);
-            }
-          }}
-        >
-          <i class="bi bi-plus-square"></i>
-        </button>
-      }
-      </>
-   )
-  }
-  return (
-    <div className='add-to-cart'>
-    {renderEl}
-    </div>
   )
 }
 
-  
+async function initMap() {
+  const map_element = document.getElementById('place-map');
+  if (!map_element) return;
+  const lat = map_element.getAttribute("lat");
+  const lng = map_element.getAttribute("lng");
 
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const block= document.querySelector('.wp-block-ept-products-single-post-details .button-data')
-    const postID = parseInt(block.dataset.postId)
-    const userID = parseInt(block.dataset.userId)
-    const loggedIn = !!block.dataset.loggedIn
-    const isFavorite = !!block.dataset.isFavorite
-    const inCart = parseInt(block.dataset.inCart)
-    
+  const { Map } = await google.maps.importLibrary("maps");
+  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+  const map_id = document.getElementById("place-location").value;
+  const  latlng = new google.maps.LatLng(lat, lng);
+  const map_options = {
+    zoom: 15,
+    center: latlng,
+    mapId : "X"
+  }
+  map = new Map(map_element, map_options)
 
-    render(
-      <>
-      <FavoritePost 
-        postID={postID} 
-        userID={userID}
-        isFavorite = {isFavorite}
-        loggedIn={loggedIn}
-      />
-      <AddToCartSP
-        postID={postID} 
-        userID={userID}
-        loggedIn={loggedIn}
-        inCart={inCart}
-      />
-      </>, block
-    )
-    
-    //render({toRender});
-}) 
+  // The marker, positioned at Uluru
+  const marker = new AdvancedMarkerElement({
+    map: map,
+    position: latlng,
+  });
+}
+
+addEventListener("DOMContentLoaded", () => {
+  initMap();
+
+  const postElement = document.querySelector('.wp-block-ept-single-post-details .single-post');
+  const imageUrls = JSON.parse(postElement.dataset.imageUrls || '[]');
+  const post_url = postElement.dataset.postUrl;
+  const postID = parseInt(postElement.dataset.postId);
+  const userID = parseInt(postElement.dataset.userId);
+  const loggedIn = !!postElement.dataset.loggedIn;
+  const isFavorite = !!postElement.dataset.isFavorite;
+  if (imageUrls.length > 0) {
+    const post_images = postElement.querySelector('.post-images');
+    const root = createRoot(post_images);
+    root.render(
+    <ImageScroller 
+      imageUrls={imageUrls} 
+      postUrl={post_url}
+      postID = {postID}
+      userID = {userID}
+      loggedIn = {loggedIn}
+      isFavorite = {isFavorite}
+    />);
+  }
+});
+

@@ -8,7 +8,7 @@ import { __ } from '@wordpress/i18n'
 import icons from '../../icons.js'
 import './main.css'
 
-registerBlockType('ept-pe/single-place-details', {
+registerBlockType('ept-products/single-post-details', {
   icon: icons.post_details,
 	edit({ attributes, setAttributes }) {
         const { content,showCategory } = attributes    

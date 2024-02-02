@@ -1,29 +1,17 @@
 <?php
 
-function ept_pr_enqueue_scripts1(){
-/*
-  $authURLs = json_encode([
-    'signup' => esc_url_raw(rest_url('ept/v1/signup')),
-    'signin' => esc_url_raw(rest_url('ept/v1/signin')),
-]);
-$passwordToolURLs = json_encode([
-    'forgot' => esc_url_raw(rest_url('ept/v1/forgot'))
-]);
+function ept_pe_enqueue_scripts() {
+    wp_register_script('ept-gmaps-handle', '', [], false, true);
 
+    $inline_script = <<<EOD
+    (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.googleapis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({key: "AIzaSyDY56cwNRUcmVLV3LpSUUwjPWx4TQJHr3I", v: "weekly"});
+EOD;
 
+    // Enqueue the dummy script
+    wp_enqueue_script('ept-gmaps-handle');
 
-wp_add_inline_script(
-    'ept-user-flow-auth-modal-view-script',
-    "const ept_auth_rest = {$authURLs}",
-    'before' //after
-);
-
-wp_add_inline_script(
-    'ept-user-flow-forgot-password-view-script',
-    "const ept_pwt_rest = {$passwordToolURLs}",
-    'before' //after
-);
-
-
-*/
+    // Add the inline script to the dummy handle
+    wp_add_inline_script('ept-gmaps-handle', $inline_script);
 }
+
+

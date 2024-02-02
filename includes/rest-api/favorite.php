@@ -2,7 +2,7 @@
 function ept_pe_rest_api_add_favorite_handler($request){
   $response['status'] = 1;
   $params = $request->get_json_params();
-
+  $response['params'] = $params;
 
   if(
     !isset($params['favorite'], $params['postID']) ||
@@ -10,6 +10,10 @@ function ept_pe_rest_api_add_favorite_handler($request){
     empty($params['postID'])
   )
   {
+    $response['message'] = 'failed initial check';
+    $response['check'] = '!isset($params[favorite], $params[postID])';
+    $resposne['result'] = !isset($params['favorite']) ;
+
     return $response;
   }
 
