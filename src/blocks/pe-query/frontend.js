@@ -44,9 +44,9 @@ function ImageScroller({ imageUrls,postUrl }) {
           <i className="bi bi-arrow-right"></i>
         </button>
       )}
-      <div className = "image-dots">
+      {imageUrls.length > 1 && <div className = "image-dots">
         {dots}
-      </div>
+      </div>}
     </>
   );
 }

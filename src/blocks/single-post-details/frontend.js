@@ -9,7 +9,6 @@ function ImageScroller(props) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [url] = useState(props.postUrl);
   const [dots, setDots] = useState([]);
-
   useEffect(() => {
     const dotElements = props.imageUrls.map((_, index) => (
       <button 
@@ -61,9 +60,9 @@ function ImageScroller(props) {
         </button>
       )}
     </div>
-    <div className = "image-preview-container">
+    {props.imageUrls.length > 1 && <div className = "image-preview-container">
       {dots}
-    </div>
+    </div>}
     </>
   );
 }
@@ -121,8 +120,6 @@ async function initMap() {
     mapId : "X"
   }
   map = new Map(map_element, map_options)
-
-  // The marker, positioned at Uluru
   const marker = new AdvancedMarkerElement({
     map: map,
     position: latlng,
