@@ -9,7 +9,7 @@
     "attributes": {
       "queryType": {
         "type": "string",
-        "default": "places"
+        "default": "both"
       },
       "title": {
         "type": "string",

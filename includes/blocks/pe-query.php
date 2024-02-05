@@ -11,23 +11,32 @@ function ept_pe_query_render_cb($atts) {
   $searchTerms = (isset($_GET["s"])) ? $_GET['s'] : '' ;
   $queryType = $atts['queryType'];
   $view = $atts['view'];
-  
   if ($showTitle){
-    $heading = substr(get_the_archive_title(),10);
+    $heading = substr(get_the_archive_title(),18);
     $category = get_queried_object_id();
   }
 
+
   switch ($view){
     case ("favorites view"):
-      $args = [
+      $place_args = [
         'post__in'=> $favoriteIDs,
-        'post_type' => array('place','event'),
+        'post_type' => 'place',
+        'posts_per_page' => $atts['count'],
+      ];
+      $event_args = [
+        'post__in'=> $favoriteIDs,
+        'post_type' => 'event',
         'posts_per_page' => $atts['count'],
       ];
       break;
     case ("all view"):
-      $args = [
-        'post_type' => array('place','event'),
+      $place_args = [
+        'post_type' => 'place',
+        'posts_per_page' => $atts['count']
+      ];
+      $event_args =[
+        'post_type' => 'event',
         'posts_per_page' => $atts['count']
       ];
       break;
@@ -35,6 +44,8 @@ function ept_pe_query_render_cb($atts) {
       $categoryIDs = array_map(function($term) {
         return $term['id'];
       }, $atts['categories']);
+
+
 
       $place_args = [
         'post_type' => 'place',
@@ -49,86 +60,90 @@ function ept_pe_query_render_cb($atts) {
         'cat' => $category,
         's' => $searchTerms
       ];
-
       if (!empty($categoryIDs)) {
         foreach($categoryIDs as $cat)
           $place_args['cat'] .= $cat .',' ;
           $event_args['cat'] .= $cat .',' ;
       }
+
       break;
   }
-  $query = new WP_Query($place_args);
-  ob_start();
-  ?>
-  <div class="wp-block-ept-pe-query">
-    <div class="inner-page-header">
-      <h1><?php _e('Places', 'e-potis'); ?></h1> 
-    </div> 
-    <div class="posts">
-      <?php 
-      if($query->have_posts()) {
-        while($query->have_posts()) {
-          $query->the_post();
-          $postID = get_the_ID();
-          $location = get_post_meta($postID,'place_location',true);
-          if ($location != ''){
-            $location_string_parts = explode(", ", trim($location, "()"));
-            $location = $location_string_parts[1];
-          }
-          $image_ids = get_post_meta($postID, 'custom_images');
-          $image_urls = [];
-          if (!empty($image_ids)) {
-              if (!is_array($image_ids)) {
-                  $image_ids = explode(',', $image_ids);
-              }
-              $image_ids = array_filter(array_map('intval', $image_ids));
-              $image_urls = array_map(function($id) {
-                  return wp_get_attachment_url($id);
-              }, $image_ids);
-          }
-          
-          $thumbnail = get_post_meta($postID, 'primary_image', true);
-          $thumbnail = ($thumbnail == '')? '' : (int) $thumbnail;
-          
-          if($userID)$isFavorite = in_array(strval($postID),$userFavoritesString) ? true : false ;
 
-          ?>
-          <div class ="single-post" data-image-urls='<?php echo json_encode($image_urls); ?>' data-post-url= '<?php the_permalink();?>'>
-     
-              <div class ="button-data post-buttons"
-                data-logged-in="<?php echo is_user_logged_in(); ?>"
-                data-post-id="<?php echo $postID; ?>"
-                data-user-id="<?php echo $userID; ?>"
-                data-is-favorite="<?php echo $isFavorite; ?>"
-              >
-                <button class="heart-button"> 
-                  <i class="bi bi-heart favorite"></i>
-                </button>
+  ob_start(); ?>
+  <div class="wp-block-ept-pe-query"> <?php
+  if ($queryType == 'places' || $queryType == 'both'){
+    $query = new WP_Query($place_args);
+    ?>
+      <div class="inner-page-header">
+        <h1><?php _e('Places', 'e-potis'); ?></h1> 
+      </div> 
+      <div class="posts">
+        <?php 
+        if($query->have_posts()) {
+          while($query->have_posts()) {
+            $query->the_post();
+            $postID = get_the_ID();
+            $location = get_post_meta($postID,'place_location',true);
+            if ($location != ''){
+              $location_string_parts = explode(", ", trim($location, "()"));
+              $location = $location_string_parts[1];
+            }
+            $image_ids = get_post_meta($postID, 'custom_images');
+            $image_urls = [];
+            if (!empty($image_ids)) {
+                if (!is_array($image_ids)) {
+                    $image_ids = explode(',', $image_ids);
+                }
+                $image_ids = array_filter(array_map('intval', $image_ids));
+                $image_urls = array_map(function($id) {
+                    return wp_get_attachment_url($id);
+                }, $image_ids);
+            }
+            
+            $thumbnail = get_post_meta($postID, 'primary_image', true);
+            $thumbnail = ($thumbnail == '')? '' : (int) $thumbnail;
+            
+            if($userID)$isFavorite = in_array(strval($postID),$userFavoritesString) ? true : false ;
+
+            ?>
+            <div class ="single-post" data-image-urls='<?php echo json_encode($image_urls); ?>' data-post-url= '<?php the_permalink();?>'>
+      
+                <div class ="button-data post-buttons"
+                  data-logged-in="<?php echo is_user_logged_in(); ?>"
+                  data-post-id="<?php echo $postID; ?>"
+                  data-user-id="<?php echo $userID; ?>"
+                  data-is-favorite="<?php echo $isFavorite; ?>"
+                >
+                  <button class="heart-button"> 
+                    <i class="bi bi-heart favorite"></i>
+                  </button>
+                </div>
+              <div class ="image-container">
+                <div class ="single-post-image image-root">
+                  <img src="<?php  echo (wp_get_attachment_url($thumbnail)); ?>" alt="">
+                </div>
               </div>
-            <div class ="image-container">
-              <div class ="single-post-image image-root">
-                <img src="<?php  echo (wp_get_attachment_url($thumbnail)); ?>" alt="">
-              </div>
-            </div>
-            <div class ="single-post-detail">
-              <a class ="post-title" href="<?php the_permalink(); ?>">
-                <?php the_title(); ?>
-              </a>
-              <div class = "button-aligner">
-                <div class = "place-info">
-                  <span class="place-location">
-                    <?php  _e("Location : ",'e-potis'); echo($location); ?>
-                  </span>
+              <div class ="single-post-detail">
+                <a class ="post-title" href="<?php the_permalink(); ?>">
+                  <?php the_title(); ?>
+                </a>
+                <div class = "button-aligner">
+                  <div class = "place-info">
+                    <span class="place-location">
+                      <?php  _e("Location : ",'e-potis'); echo($location); ?>
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <?php
+            <?php
+          }
         }
-      }
-      ?>
-    </div>
-    <?php wp_reset_postdata(); 
+        ?>
+      </div>
+      <?php wp_reset_postdata(); 
+  }
+  if ($queryType == 'events' || $queryType == 'both'){
       $query = new WP_Query($event_args);
       ?>
     <div class="inner-page-header">
@@ -209,7 +224,7 @@ function ept_pe_query_render_cb($atts) {
   </div>
   <?php
   wp_reset_postdata();
-  
+  }
   $output = ob_get_contents();
   ob_end_clean();
 

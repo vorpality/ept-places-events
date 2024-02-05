@@ -15,42 +15,66 @@ import { useSelect } from '@wordpress/data';
 import './main.css'
 import block from './block.json';
 
-registerBlockType(block.name, {
-  title: block.title,
-  category: block.category,
-  attributes: block.attributes,
-  edit: ({ attributes, setAttributes }) => {
-    const {
-      queryType,
-      title,
-      count,
-      categories,
-      view,
-      showCategory,
-      cartEnabled,
-      content
-    } = attributes;
+registerBlockType(block.name, { 
+	edit({ attributes, setAttributes }) {
+    const { content, showCategory, count, categories, view, queryType } = attributes
+    const blockProps = useBlockProps()
 
-    const terms = useSelect((select) => {
-      const eventCats = select('core').getEntityRecords('taxonomy', 'event_category', {
-        per_page: -1
-      }) || [];      
-      const placeCats = select('core').getEntityRecords('taxonomy', 'place_category', {
-        per_page: -1
-      }) || [];
-      return [...eventCats, ...placeCats];
-    }, []);
 
-    // Prepare category options for QueryControls
-    const categoryOptions = terms ? terms.map(term => ({ value: term.id, label: term.name })) : [];
+    const terms = useSelect((select) => { 
+      return select('core').getEntityRecords(
+        'taxonomy',
+        'category',
+        {
+          per_page: -1
+        }
+      );
+    });
+    const suggestions = {};
+  
+    terms?.forEach((term) => {
+      suggestions[term.name] = term;
+    });
 
-    // Handle category selection change
-    const onCategoryChange = (newCategories) => {
-      setAttributes({ categories: newCategories });
-    };
+    const categoryIDs = categories.map((term) => term.id);
+    const posts = useSelect( 
+      (select) => {
+        return select('core').getEntityRecords('postType', 'recipe', {
+          per_page: count,
+          _embed: true,
+          category : categoryIDs,
+          order: 'desc',
+        });
+    },
+    [count,categoryIDs] // variable watch 
+    );
 
-    // Prepare the block properties
-    const blockProps = useBlockProps();
+    const switchPost = (view =='normal view') ?
+    <QueryControls 
+      numberOfItems={count}
+      minItems={1}
+      maxItems={20}
+      onNumberOfItemsChange={count => setAttributes({ count })}
+      categorySuggestions = {suggestions}
+      onCategoryChange={(newTerms) => {
+        const newCategories = []
+        newTerms.forEach((category) => {
+          if(typeof category === 'object'){
+            return newCategories.push(category);
+          }
+
+          const categoryTerm = terms?.find(
+            (term) => term.name === category
+          );
+
+          if(categoryTerm) newCategories.push(categoryTerm);
+        });
+
+        setAttributes({categories: newCategories});
+      }}
+      selectedCategories= {categories }
+    />
+  : ''
 
     return (
       <>
@@ -64,7 +88,7 @@ registerBlockType(block.name, {
                 { label: __('Events', 'e-potis'), value: 'events' },
                 { label: __('Both', 'e-potis'), value: 'both' }
               ]}
-              onChange={(value) => setAttributes({ queryType: value })}
+              onChange={queryType => setAttributes({ queryType})}
             />
             <SelectControl
               label={__('View', 'e-potis')}
@@ -74,20 +98,14 @@ registerBlockType(block.name, {
                 { label: __('Favorites', 'e-potis'), value: 'favorites view' },
                 { label: __('Normal', 'e-potis'), value: 'normal view' }
               ]}
-              onChange={(value) => setAttributes({ queryType: value })}
+              onChange={view => setAttributes({ view })}
             />
             <ToggleControl
               label={__('Show Category', 'e-potis')}
               checked={showCategory}
               onChange={(newShowCategory) => setAttributes({ showCategory: newShowCategory })}
             />
-            <QueryControls
-              numberOfItems={count}
-              onNumberOfItemsChange={(newCount) => setAttributes({ count: newCount })}
-              categoriesList={categoryOptions}
-              selectedCategoryId={categories}
-              onCategoryChange={onCategoryChange}
-            />
+            {switchPost}
           </PanelBody>
         </InspectorControls>
         <div {...blockProps}>
