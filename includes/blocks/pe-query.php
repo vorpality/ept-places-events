@@ -12,10 +12,9 @@ function ept_pe_query_render_cb($atts) {
   $queryType = $atts['queryType'];
   $view = $atts['view'];
   if ($showTitle){
-    $heading = substr(get_the_archive_title(),18);
+    $heading = substr(get_the_archive_title(),10);
     $category = get_queried_object_id();
   }
-
 
   switch ($view){
     case ("favorites view"):
@@ -73,13 +72,13 @@ function ept_pe_query_render_cb($atts) {
   <div class="wp-block-ept-pe-query"> <?php
   if ($queryType == 'places' || $queryType == 'both'){
     $query = new WP_Query($place_args);
+    if($query->have_posts()) {
     ?>
       <div class="inner-page-header">
         <h1><?php _e('Places', 'e-potis'); ?></h1> 
       </div> 
       <div class="posts">
         <?php 
-        if($query->have_posts()) {
           while($query->have_posts()) {
             $query->the_post();
             $postID = get_the_ID();
@@ -137,7 +136,7 @@ function ept_pe_query_render_cb($atts) {
               </div>
             </div>
             <?php
-          }
+          } 
         }
         ?>
       </div>
@@ -145,13 +144,13 @@ function ept_pe_query_render_cb($atts) {
   }
   if ($queryType == 'events' || $queryType == 'both'){
       $query = new WP_Query($event_args);
+      if($query->have_posts()) {
       ?>
     <div class="inner-page-header">
       <h1><?php _e('Events', 'e-potis'); ?></h1> 
     </div> 
     <div class="posts">
       <?php 
-      if($query->have_posts()) {
         while($query->have_posts()) {
           $query->the_post();
           $postID = get_the_ID();
