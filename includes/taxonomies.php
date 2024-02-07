@@ -24,7 +24,7 @@ function ept_pe_taxonomy_rules(){
     
 function load_custom_taxonomy_template($template) {
     if (is_tax('place_category') || is_tax('event_categories')) {
-        $new_template = locate_template(array('your-custom-taxonomy-template.php'));
+        $new_template = locate_template(array('taxonomy.php'));
         if ('' != $new_template) {
             return $new_template;
         }

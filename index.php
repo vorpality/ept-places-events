@@ -39,3 +39,5 @@ add_action('rest_api_init', 'ept_pe_rest_api_init');
 add_action('admin_enqueue_scripts', 'ept_pe_admin_enqueue');
 add_action('wp_enqueue_scripts', 'ept_pe_enqueue_scripts');
 add_action('transition_post_status', 'ept_pe_publish_custom_post_meta',10,3);
+
+add_filter('template_include', 'load_custom_taxonomy_template');
