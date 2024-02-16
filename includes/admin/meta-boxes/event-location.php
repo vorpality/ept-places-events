@@ -11,7 +11,7 @@ function ept_pe_event_add_location($post){
           <label> <?php _e('Location', 'e-potis')?></label>
       </th>
       <td>
-          <input list="places-list" type="text" name="ept_pe_event_location" id="place-location" value="<?php echo esc_attr($oldLocation); ?>"/>
+          <input list="places-list" type="text" name="ept_pe_event_location" id="place-location" value="<?php echo esc_attr(get_the_title($oldLocation)); ?>"/>
           <datalist id="places-list">
               <?php foreach ($places as $place) {
                   echo '<option value="' . esc_attr($place->post_title) . '" data-place-id="' . esc_attr($place->ID) . '"></option>';

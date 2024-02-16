@@ -59,6 +59,7 @@ function ept_products_single_post_details_render_cb($atts) {
       data-user-id="<?php echo $userID; ?>"
       data-is-favorite="<?php echo $isFavorite; ?>"
       >
+      <?php if($image_ids){ ?>
       <div class ="post-images">
         <div class ="post-buttons">
           <button class="heart-button"> 
@@ -69,6 +70,7 @@ function ept_products_single_post_details_render_cb($atts) {
           <img src="<?php  echo (wp_get_attachment_url($thumbnail)); ?>" alt="">
         </div>
       </div> <?php 
+      }
       if ($postType == 'place') { ?>
         <div class ="single-post-detail">
           <div class = "post-info">

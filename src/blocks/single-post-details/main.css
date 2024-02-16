@@ -199,3 +199,7 @@ visibility: visible;
 .wp-block-ept-single-post-details .image-preview-container .active{
   border:3px solid rgba(0, 0, 255, .6);
 }
+
+.wp-block-ept-single-post-details .single-post-detail .post-info .event-location>a:hover {
+  text-decoration: underline;
+}
