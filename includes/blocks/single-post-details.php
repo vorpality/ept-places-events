@@ -1,11 +1,12 @@
 <?php
 
 function ept_products_single_post_details_render_cb($atts) {
+  //require_once EPT_PE_PLUGIN_DIR . 'includes/bar-owners.php';
   $userID = get_current_user_id();
   $postID = get_the_ID();
   $isFavorite = false;
   $postType = get_post_type($postID);
-
+  $canEdit = does_own($userID, $postID);
   //Prepare 
   if ($postType == 'place'){
     $location = get_post_meta($postID,'place_location',true);
@@ -51,6 +52,13 @@ function ept_products_single_post_details_render_cb($atts) {
 
   ?>
   <div class ="wp-block-ept-single-post-details">
+    <?php if ($canEdit){ ?>
+      <div id = "edit-line">
+        <button id = "edit-button">
+          <i class="bi bi-pencil-square"></i>
+        </button>
+      </div>
+    <?php } ?>
     <div class ="single-post" 
       data-image-urls='<?php echo json_encode($image_urls); ?>' 
       data-post-url= '<?php the_permalink();?>'

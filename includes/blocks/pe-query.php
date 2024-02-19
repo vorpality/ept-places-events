@@ -102,7 +102,7 @@ function ept_pe_query_render_cb($atts) {
             $thumbnail = get_post_meta($postID, 'primary_image', true);
             $thumbnail = ($thumbnail == '')? '' : (int) $thumbnail;
             
-            $isFavorite = in_array(strval($postID),$userFavoritesString) ? true : false ;
+            if($userID > 0)$isFavorite = in_array(strval($postID),$userFavoritesString) ? true : false ;
 
             ?>
             <div class ="single-post" data-image-urls='<?php echo json_encode($image_urls); ?>' data-post-url= '<?php the_permalink();?>'>
@@ -181,7 +181,7 @@ function ept_pe_query_render_cb($atts) {
           $thumbnail = get_post_meta($postID, 'primary_image', true);
           $thumbnail = ($thumbnail == '')? '' : (int) $thumbnail;
           
-          $isFavorite = in_array(strval($postID),$userFavoritesString) ? true : false ;
+          if($userID > 0)$isFavorite = in_array(strval($postID),$userFavoritesString) ? true : false ;
           ?>
           <div class ="single-post" data-image-urls='<?php echo json_encode($image_urls); ?>' data-post-url= '<?php the_permalink();?>'>
 

@@ -203,3 +203,31 @@ visibility: visible;
 .wp-block-ept-single-post-details .single-post-detail .post-info .event-location>a:hover {
   text-decoration: underline;
 }
+
+.wp-block-ept-single-post-details #edit-line {
+  width:80%;
+  display:flex;
+  flex-direction: row-reverse;
+  border: 1px solid black;
+  padding:1rem;
+  margin:auto;
+}
+
+
+.wp-block-ept-single-post-details #edit-button {
+  font-size:2rem;
+}
+
+.wp-block-ept-single-post-details #edit-button:hover{
+  background-color: inherit;
+}
+
+.wp-block-ept-single-post-details #edit-button .bi{
+  border-radius: .6rem;
+  padding:.3rem;
+  padding-bottom:0.1rem;
+}
+.wp-block-ept-single-post-details #edit-button .bi:hover{
+  background-color:  var(--wp--preset--color--ept-gray-300);
+  
+}
