@@ -2,6 +2,7 @@
 import {render, useState, useEffect} from '@wordpress/element'
 import apiFetch from '@wordpress/api-fetch'
 import { createRoot } from "react-dom/client";
+import { __ } from '@wordpress/i18n';
 
 let map;
 
@@ -126,6 +127,110 @@ async function initMap() {
   });
 }
 
+//Editing React
+
+function EditDashboard({ postID }) {
+  const [postDetails, setPostDetails] = useState({
+    title: '',
+    description: '',
+    location: '',
+    date: '',
+    images: ''
+  });
+
+  useEffect(() => {
+    const fetchPostDetails = async () => {
+      try {
+        const response = await apiFetch({
+          path: `ept/v1/edit_post`, 
+          method: 'POST',
+          data: { postID: postID }
+        });
+
+        console.log(response); // Log the fetched response
+
+        const postType = response.post.type;
+        setPostDetails({
+          title: response.post.title || '',
+          description: response.post.description || '',
+          primary_image: response.post.meta.primary_image || '',
+          images: response.post.meta.custom_images || [],
+          type: response.post.type,
+        })
+          if (postType == "place"){
+            setPostDetails(prevDetails => ({
+              ...prevDetails,
+              location: response.post.meta.place_location || ''
+            }));
+          }
+          if (postType == "event"){
+            setPostDetails(prevDetails => ({
+              ...prevDetails,
+              location: response.post.event_location || '',
+              date: response.post.date || '',
+            }));
+          }
+      } catch (error) {
+        console.error('Error fetching post details:', error);
+      }
+    };
+
+    fetchPostDetails();
+  }, [postID]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setPostDetails(prevDetails => ({ ...prevDetails, [name]: value }));
+  };
+
+  const saveChanges = () => {
+    console.log(postDetails);
+    // Implement functionality to update post details on the server...
+    location.reload();
+  };
+
+  return (
+    
+    <div className = "post-info edit-phase">
+      {console.log(postDetails)}
+      <label className = "edit-label">
+        {__('Title', 'e-potis')}
+      </label>
+      <input 
+        className='detail-box'
+        type="text" 
+        name="title" 
+        value={postDetails.title || ''} 
+        onChange={handleChange} 
+      />
+      <label className = "edit-label">
+        {__('Description', 'e-potis')}
+      </label>
+      <textarea 
+        className = 'detail-box' 
+        name="description" 
+        rows="10"
+        colums="44"
+        value={postDetails.description || ''} 
+        onChange={handleChange}>
+      </textarea>
+
+      {postDetails.type=="place" &&
+        <input 
+          className='detail-box'
+          type="text" 
+          name="location" 
+          value={postDetails.location || ''} 
+          onChange={handleChange} 
+        />
+      }
+      <button onClick={saveChanges}>Save</button>
+    </div>
+  );
+}
+
+
+
 addEventListener("DOMContentLoaded", () => {
   initMap();
 
@@ -149,5 +254,17 @@ addEventListener("DOMContentLoaded", () => {
       isFavorite = {isFavorite}
     />);
   }
+
+  const edit_button = document.querySelector('.wp-block-ept-single-post-details #edit-button');
+  edit_button.addEventListener('click', (event) => {
+    event.preventDefault();
+    const editable_interface = document.querySelector('.wp-block-ept-single-post-details');
+    const editable_interface_root = createRoot(editable_interface);
+    editable_interface_root.render(
+      <EditDashboard
+        postID = {postID}
+      />
+    )
+  })
 });
 
