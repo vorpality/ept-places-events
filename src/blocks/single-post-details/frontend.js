@@ -23,7 +23,7 @@ function ImageScroller(props) {
         />
       </button>
     ));
-    setDotsdotEleme(nts);
+    setDots(dotElements);
   }, [currentImageIndex, props.imageUrls]);
 
 
