@@ -10,6 +10,8 @@ function ImageScroller(props) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [url] = useState(props.postUrl);
   const [dots, setDots] = useState([]);
+
+ 
   useEffect(() => {
     const dotElements = props.imageUrls.map((_, index) => (
       <button 
@@ -23,8 +25,19 @@ function ImageScroller(props) {
         />
       </button>
     ));
+    
     setDots(dotElements);
+
+
   }, [currentImageIndex, props.imageUrls]);
+
+  
+  useEffect(() => {     
+  const startingImageIndex = props.imageUrls.findIndex(url => url === props.startingImage);
+  if (startingImageIndex !== -1) {
+    setCurrentImageIndex(startingImageIndex);
+  }
+  }, [props.imageUrls, props.startingImage, ]);
 
 
   const handlePrevClick = () => {
@@ -236,6 +249,7 @@ addEventListener("DOMContentLoaded", () => {
 
   const postElement = document.querySelector('.wp-block-ept-single-post-details .single-post');
   const imageUrls = JSON.parse(postElement.dataset.imageUrls || '[]');
+  const primary_image = postElement.dataset.primaryUrl;
   const post_url = postElement.dataset.postUrl;
   const postID = parseInt(postElement.dataset.postId);
   const userID = parseInt(postElement.dataset.userId);
@@ -246,6 +260,7 @@ addEventListener("DOMContentLoaded", () => {
     const root = createRoot(post_images);
     root.render(
     <ImageScroller 
+      startingImage = {primary_image}
       imageUrls={imageUrls} 
       postUrl={post_url}
       postID = {postID}

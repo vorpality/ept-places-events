@@ -63,6 +63,7 @@ function ept_products_single_post_details_render_cb($atts) {
       data-image-urls='<?php echo json_encode($image_urls); ?>' 
       data-post-url= '<?php the_permalink();?>'
       data-logged-in="<?php echo is_user_logged_in(); ?>"
+      data-primary-url="<?php echo (wp_get_attachment_url($thumbnail)); ?>"
       data-post-id="<?php echo $postID; ?>"
       data-user-id="<?php echo $userID; ?>"
       data-is-favorite="<?php echo $isFavorite; ?>"
