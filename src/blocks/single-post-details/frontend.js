@@ -273,6 +273,8 @@ addEventListener("DOMContentLoaded", () => {
   const edit_button = document.querySelector('.wp-block-ept-single-post-details #edit-button');
   edit_button.addEventListener('click', (event) => {
     event.preventDefault();
+    window.location.href = window.location.origin + '/edit-event?pid='+postID;
+    /*
     const editable_interface = document.querySelector('.wp-block-ept-single-post-details');
     const editable_interface_root = createRoot(editable_interface);
     editable_interface_root.render(
@@ -280,6 +282,7 @@ addEventListener("DOMContentLoaded", () => {
         postID = {postID}
       />
     )
+    */
   })
 });
 
