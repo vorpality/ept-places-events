@@ -160,11 +160,11 @@
     bottom:0;
     left: 0;
 }
-.wp-block-ept-pe-query .is-favorite .favorite ,.wp-block-ept-pe-query .favorite:hover {
+.wp-block-ept-pe-query .is-favorite.heart-button ,.wp-block-ept-pe-query .heart-button:hover {
     color: red;
 }
     
-.wp-block-ept-pe-query .is-favorite:hover .favorite, .wp-block-ept-pe-query .favorite {
+.wp-block-ept-pe-query .is-favorite:hover.heart-button, .wp-block-ept-pe-query .heart-button {
     color: black;
 }
 

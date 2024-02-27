@@ -2,14 +2,8 @@
 
 function ept_pe_register_blocks() {
     $blocks = [
-        [ 'name' => 'event-query', 'options' => [
-            'render_callback' => 'ept_event_query_render_cb'
-        ]],
         [ 'name' => 'pe-query', 'options' => [
             'render_callback' => 'ept_pe_query_render_cb'
-        ]],
-        [ 'name' => 'place-query', 'options' => [
-            'render_callback' => 'ept_place_query_render_cb'
         ]],
         [ 'name' => 'filter-button', 'options' => [
             'render_callback' => 'ept_pe_filter_button_render_cb'

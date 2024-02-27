@@ -112,11 +112,11 @@
   margin-top : 11%
 }
 
-.wp-block-ept-single-post-details .is-favorite .heart-button ,.wp-block-ept-single-post-details .heart-button:hover {
+.wp-block-ept-single-post-details  .heart-button.is-favorite,.wp-block-ept-single-post-details .heart-button:hover {
   color: red;
 }
   
-.wp-block-ept-single-post-details .is-favorite:hover .heart-button, .wp-block-ept-single-post-details .heart-button {
+.wp-block-ept-single-post-details .is-favorite:hover.heart-button, .wp-block-ept-single-post-details .heart-button {
   color: black;
 }
 
