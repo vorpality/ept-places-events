@@ -3,11 +3,11 @@
 
 #npm stuff
 /node_modules
-
-#general stuff
 /package-lock.json
 /package.json
 
+#general
+/old
 #translations?
 /languages
 

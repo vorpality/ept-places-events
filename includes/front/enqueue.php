@@ -1,6 +1,7 @@
 <?php
 
 function ept_pe_enqueue_scripts() {
+    ept_pe_enqueue_rest_shorts();
     wp_register_script('ept-gmaps-handle', '', [], false, true);
 
     $inline_script = <<<EOD
@@ -12,6 +13,29 @@ EOD;
 
     // Add the inline script to the dummy handle
     wp_add_inline_script('ept-gmaps-handle', $inline_script);
+
+    };
+
+function ept_pe_enqueue_rest_shorts() {
+    $eventURLS = json_encode([
+        'update' => esc_url_raw(rest_url('ept/v1/update-event')),
+        //'edit' => esc_url_raw(rest_url('ept/v1/edit-event'))
+    ]);
+    $postURLS = json_encode([
+        'retrieve' => esc_url_raw(rest_url('ept/v1/retrieve-post'))
+    ]);
+    
+
+    wp_add_inline_script(
+        'ept-pe-update-event-view-script',          
+        "const ept_events = {$eventURLS}",
+        'before' //after
+    );
+    wp_add_inline_script(
+        'ept-pe-update-event-view-script',          
+        "const ept_posts = {$postURLS}",
+        'before' //after
+    );
 }
 
 

@@ -1,6 +1,6 @@
 <?php
 
-function ept_products_single_post_details_render_cb($atts) {
+function ept_pe_single_post_details_render_cb($atts) {
   //require_once EPT_PE_PLUGIN_DIR . 'includes/bar-owners.php';
   $userID = get_current_user_id();
   $postID = get_the_ID();
@@ -33,20 +33,28 @@ function ept_products_single_post_details_render_cb($atts) {
     }
   }
 
+  $thumbnail_id = get_post_meta($postID, 'primary_image', true);
+  $thumbnail_id = ($thumbnail_id == '')? '' : (int) $thumbnail_id;
+
   $image_ids = get_post_meta($postID, 'custom_images');
   $image_urls = [];
-  if (!empty($image_ids)) {
-      if (!is_array($image_ids)) {
-          $image_ids = explode(',', $image_ids);
+
+  if ($thumbnail_id > 0) {
+    $thumbnail_url = wp_get_attachment_url($thumbnail_id);
+    if (!empty($thumbnail_url)) {
+        $image_urls[] = $thumbnail_url;
+    }
+  }
+  foreach ($image_ids as $id) {
+    if ($id != $thumbnail_id) {
+      $url = wp_get_attachment_url($id);
+      if (!empty($url)) {
+          $image_urls[] = $url;
       }
-      $image_ids = array_filter(array_map('intval', $image_ids));
-      $image_urls = array_map(function($id) {
-          return wp_get_attachment_url($id);
-      }, $image_ids);
+    }
   }
 
-  $thumbnail = get_post_meta($postID, 'primary_image', true);
-  $thumbnail = ($thumbnail == '')? '' : (int) $thumbnail;
+
   
   ob_start();
 
@@ -63,7 +71,7 @@ function ept_products_single_post_details_render_cb($atts) {
       data-image-urls='<?php echo json_encode($image_urls); ?>' 
       data-post-url= '<?php the_permalink();?>'
       data-logged-in="<?php echo is_user_logged_in(); ?>"
-      data-primary-url="<?php echo (wp_get_attachment_url($thumbnail)); ?>"
+      data-primary-url="<?php echo ($thumbnail_url); ?>"
       data-post-id="<?php echo $postID; ?>"
       data-user-id="<?php echo $userID; ?>"
       data-is-favorite="<?php echo $isFavorite; ?>"
@@ -76,7 +84,7 @@ function ept_products_single_post_details_render_cb($atts) {
           </button>
         </div>
         <div class ="single-post-image image-root">
-          <img src="<?php  echo (wp_get_attachment_url($thumbnail)); ?>" alt="">
+          <img src="<?php  echo (wp_get_attachment_url($thumbnail_url)); ?>" alt="">
         </div>
       </div> <?php 
       }

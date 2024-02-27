@@ -10,8 +10,11 @@ function ept_pe_register_blocks() {
         ]],
         [ 'name' => 'locator'],
         [ 'name' => 'single-post-details', 'options' => [
-            'render_callback' => 'ept_products_single_post_details_render_cb'
+            'render_callback' => 'ept_pe_single_post_details_render_cb'
         ]],
+        [ 'name' => 'update-event', 'options' => [
+            'render_callback' => 'ept_pe_update_event_form_render_cb'
+        ]]
         
     ];
  

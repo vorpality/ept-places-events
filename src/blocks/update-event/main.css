@@ -1,0 +1,248 @@
+.wp-block-ept-pe-update-event {
+  --tw-bg-opacity: 1;
+  --tw-text-opacity: 1;
+  color : var(--wp--preset--color--ept-gray-400);
+  background-color: inherit;
+  --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  margin-left:2rem;
+  margin-bottom:1rem;
+}
+
+.wp-block-ept-pe-update-event #add-new-event-label {
+  margin-top: -1rem;
+  font-size: 1.5rem;
+}
+
+.wp-block-ept-pe-update-event h3 {
+  margin-bottom: .5rem;
+  margin-top: 2rem;
+  line-height: 2rem;
+  font-weight: 700;
+  color: inherit;
+}
+.wp-block-ept-pe-update-event form {
+  align-items: flex-start;
+  display:flex;
+  flex-direction:column;
+  justify-content: center;
+  border-radius: 0.5rem;
+  --tw-bg-opacity: 1;
+  padding:2rem;
+ margin-bottom:2rem;
+  text-align: center;
+  border:1px solid white;
+  border-radius: 0.5rem;
+
+}
+.wp-block-ept-pe-update-event form fieldset {
+  width:100%;
+  align-items: flex-start;
+  display:flex;
+  flex-direction:column;
+  justify-content: center;
+  border-radius: 0.5rem;
+  --tw-bg-opacity: 1;
+  padding:2rem;
+ margin-bottom:2rem;
+  text-align: center;
+}
+
+.wp-block-ept-pe-update-event label {
+  display:block;
+  padding-right:1rem;
+  padding-top:1rem;
+  padding-bottom:.4rem;
+  margin-bottom:.2rem;
+  font-weight:bold;
+  font-size:large;
+}
+@media (min-width: 640px) {
+  .wp-block-ept-pe-update-event form {
+    display: flex;
+  }
+}
+
+.wp-block-ept-pe-update-event form input, .wp-block-ept-pe-update-event .event-title input{
+  flex-grow: 1;
+  min-width : 30%;
+  margin-bottom:1rem;
+  border-style: none;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  min-height:1.7rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  --tw-text-opacity: 1;
+  color: #000;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.wp-block-ept-pe-update-event #event-location {
+  min-width: 5rem;
+  color:black;
+  padding:2px;
+  /*
+  background:url( "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-caret-down' viewBox='0 0 16 16'%3E%3Cpath d='M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659'/%3E%3C/svg%3E");
+*/
+}
+
+.wp-block-ept-pe-update-event .btn-wrapper {
+  margin-left: auto;
+  margin-right: auto;
+  align-items: right;
+  padding-top:1.5rem;
+  display:flex;
+}
+.wp-block-ept-pe-update-event .btn-wrapper > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 0;
+  margin-right: calc(1rem * var(--tw-space-x-reverse));
+  margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
+}
+.wp-block-ept-pe-update-event .btn-wrapper {
+  border-radius: 0.5rem;
+
+}
+.wp-block-ept-pe-update-event .btn-wrapper>button {
+  color:red;
+  min-width: 7rem;
+  border-radius: 0.75rem;
+  border-style: none;
+  --tw-bg-opacity: 1;
+  background-color: var(--wp--preset--color--ept-white);
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 1rem;
+  font-weight:700;
+  line-height: 1.5rem;
+  --tw-text-opacity: 1;
+  color: #000;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.wp-block-ept-pe-update-event .btn-wrapper > button:hover {
+  border-radius: 0.85rem;
+  background-color: var(--wp--preset--color--ept-gray-200);
+}
+
+
+
+.wp-block-ept-pe-update-event #form-status{
+  width:100%;
+}
+.wp-block-ept-pe-update-event .form-status {
+  margin-bottom: 1rem;
+  border-radius: 0.25rem;
+  padding: 1rem;
+  text-align: center;
+  font-weight: 700;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+.wp-block-ept-pe-update-event .form-status.form-status-info {
+  --tw-bg-opacity: 1;
+  background-color: rgb(96 165 250 / var(--tw-bg-opacity));
+}
+.wp-block-ept-pe-update-event .form-status.form-status-success {
+  --tw-bg-opacity: 1;
+  background-color: rgb(74 222 128 / var(--tw-bg-opacity));
+}
+.wp-block-ept-pe-update-event .form-status.form-status-danger {
+  --tw-bg-opacity: 1;
+  background-color: rgb(248 113 113 / var(--tw-bg-opacity));
+}
+
+.wp-block-ept-pe-update-event textarea{
+  resize: none;
+  color:black;
+}
+
+.wp-block-ept-pe-update-event .file-upload-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width:90%
+}
+
+.wp-block-ept-pe-update-event .file-upload-button {
+  width:40%;
+  border: 2px solid #000;
+  color: #fff;
+  background-color: #333;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.wp-block-ept-pe-update-event .file-upload-name {
+  margin-left: 10px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.wp-block-ept-pe-update-event .file-list {
+  margin-top: 10px;
+  display: flex;
+  align-items: flex-start;
+
+}
+.wp-block-ept-pe-update-event .side-by-side .primary-label {
+  font-weight: normal;
+}
+.wp-block-ept-pe-update-event .file-image-container{
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  height: 100px; 
+  width:100px;
+  margin:0.66rem;
+}
+
+.wp-block-ept-pe-update-event .file-image-container .file-image{
+  display: block;
+  margin: 0 auto;
+}
+
+.wp-block-ept-pe-update-event .side-by-side {
+  display: flex;
+  flex-direction: row-reverse;
+  width:100%;
+}
+
+.wp-block-ept-pe-update-event .file-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 5px;
+  margin-right:3rem;
+}
+
+.wp-block-ept-pe-update-event .remove-file {
+  position:relative;
+  left: -24px;
+  top: -35px;
+  cursor: pointer;
+  color: red;
+}
+
+.wp-block-ept-pe-update-event .primary-image-check {
+  margin-top: .98rem;
+  transform: scale(0.7); 
+}
+
+.wp-block-ept-pe-update-event .clear-list{
+  width :20%;
+}
+
+.wp-block-ept-pe-update-event .clear-list:hover{
+  text-decoration: underline; 
+  background-color: inherit;
+}
