@@ -13,3 +13,25 @@ export const toggleFavoriteStatus = async (data) => {
   })
   return response;
 }
+export const getImages = async (post_id) =>{
+  if (post_id==0) return [];
+
+  const formData = {
+    postID : post_id
+  }
+
+const response = await fetch(ept_posts.retrieve, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(formData)
+});
+
+const responseJSON = await response.json();
+const images = {
+  custom_images : responseJSON.images,
+  primary_image : responseJSON.primary_image_id
+}
+return images;
+}

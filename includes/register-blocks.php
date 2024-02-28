@@ -14,6 +14,9 @@ function ept_pe_register_blocks() {
         ]],
         [ 'name' => 'update-event', 'options' => [
             'render_callback' => 'ept_pe_update_event_form_render_cb'
+        ]],
+        [ 'name' => 'update-place', 'options' => [
+            'render_callback' => 'ept_pe_update_place_form_render_cb'
         ]]
         
     ];

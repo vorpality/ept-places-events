@@ -25,4 +25,13 @@ function ept_pe_rest_api_init(){
         'callback' => 'ept_pe_rest_api_retrieve_post_handler',
         'permission_callback' => '__return_true'
     ]);
+
+    register_rest_route('ept/v1', '/update-place', [
+        'methods' => WP_REST_SERVER::CREATABLE,
+        'callback' => 'ept_pe_rest_api_update_place_handler',
+        'permission_callback' => '__return_true'
+    ]);
+
+
+
   }
