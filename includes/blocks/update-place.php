@@ -78,8 +78,9 @@ function ept_pe_update_place_form_render_cb($atts) {
       <input type = "hidden" id = "temp-lng">
       <input type = "hidden" id = "temp-lat">
 
-      <div id="map-overlay"></div>
+      <div id="map-overlay" class = "close-popup"></div>
       <div id = "popup-container">
+        <button class = "close-popup"> X </button>
         <div id="map-canvas"></div>
         <button id="confirm-location"><?php _e('Confirm Location', 'e-potis');?></button>
       </div>

@@ -4,6 +4,8 @@ import { FileUploadComponent} from '../../common/components/FileUploadComponent.
 import { updatePlace } from './services/apiServices.js';
 import { getImages } from '../../common/services/apiService.js';
 import { mapAutoComplete } from '../../common/services/mapAutoComplete.js';
+import { mapSelect } from '../../common/services/selectFromMap.js';
+
 document.addEventListener('DOMContentLoaded',async () => {
   const post_id = document.querySelector('.wp-block-ept-pe-update-place').getAttribute('data-post-id');
 
@@ -55,7 +57,6 @@ document.addEventListener('DOMContentLoaded',async () => {
     formData.append('primary_image_id', primaryImage);
     const response = await updatePlace(formData);
     const responseJSON = await response.json();
-    console.log(responseJSON)
     if(response.status == 200) {
       add_place_status.innerHTML = `
         <div class = "form-status form-status-success">
@@ -80,62 +81,24 @@ document.addEventListener('DOMContentLoaded',async () => {
   })
   document.head.append(mapAutoCompleteField.script);
 
-  document.getElementById('map-select').addEventListener('click', () => {
+  const modal = {
+    content : document.getElementById('map-popup'),
+    confirmButton : document.getElementById('confirm-location'),
+    openButton : document.getElementById('map-select'),
+    closeButton : Array.from(document.querySelectorAll('.close-popup'))
+  }
 
-    const fields = {
-      latField : document.getElementById('temp-lat'),
-      lngField : document.getElementById('temp-lng')
-    }
-    document.getElementById('map-popup').style.display = 'block';
-    initMapPopup(fields); 
-  });
-  
-  document.getElementById('confirm-location').addEventListener('click', async () => {
-    const result_lat = document.getElementById('place-lat');
-    const result_lng = document.getElementById('place-lng');
-    result_lat.value = parseFloat(document.getElementById('temp-lat').value);
-    result_lng.value = parseFloat(document.getElementById('temp-lng').value);
-    const latLng = {
-      lat : parseFloat(document.getElementById('temp-lat').value),
-      lng : parseFloat(document.getElementById('temp-lng').value)
-    }
-    const geocoder = new google.maps.Geocoder();
-    console.log(latLng);
-    geocoder.geocode({ location: latLng }, (results, status) => {
-      if (status === 'OK' && results[0]) {
-        document.getElementById('place-location').value = results[0].formatted_address;
-      }
-    });
-  
-    document.getElementById('map-popup').style.display = 'none';
-  });
-})
+  const tempFields = {
+      lat : document.getElementById('temp-lat'),
+      lng : document.getElementById('temp-lng')
+  }
+
+  const mainFields = {
+    lat : document.getElementById('place-lat'),
+    lng : document.getElementById('place-lng'),
+    input: document.getElementById('place-location')
+  }
+  mapSelect({modal,tempFields,mainFields});
+});
 
 
-
-async function initMapPopup(fields) {
-  const {AdvancedMarkerElement} = await google.maps.importLibrary("marker")
-  const map = new google.maps.Map(document.getElementById('map-canvas'), {
-    mapId : 'potato',
-    center: { lat: 37.98, lng: 23.725 }, // Default location
-    zoom: 12,
-  });
-
-
-  let markers = [];
-  map.addListener("click", (mapsMouseEvent) => {
-    const latlng = mapsMouseEvent.latLng.toJSON();
-    if (markers[0]){
-      markers[0].position = null;
-    }
-    markers = [];
-    markers.push(new AdvancedMarkerElement ({
-      position: { lat: latlng.lat, lng: latlng.lng },
-      map: map,
-      draggable: true,
-    }));
-    fields.latField.value = latlng.lat;
-    fields.lngField.value = latlng.lng;
-  })
-
-}

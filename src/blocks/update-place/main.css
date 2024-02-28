@@ -126,7 +126,7 @@
 }
 .wp-block-ept-pe-update-place .btn-wrapper > button:hover {
   border-radius: 0.85rem;
-  background-color: var(--wp--preset--color--ept-gray-200);
+  color : rgb(0 0 0 / 0.5)
 }
 
 
@@ -247,6 +247,23 @@
   background-color: inherit;
 }
 
+.wp-block-ept-pe-update-place #map-select {
+  width:20%;
+  border: 2px solid #000;
+  color: #fff;
+  background-color: #333;
+  padding: .7rem 0.5rem;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.wp-block-ept-pe-update-place #map-select:hover, .wp-block-ept-pe-update-place .file-upload-button:hover  {
+  color: rgb(255 255 255 / 0.8);
+}
+
+
 .wp-block-ept-pe-update-place #map-popup{
   padding: 2rem;
   position:absolute;
@@ -276,13 +293,28 @@
   z-index: 1000;
 }
 
-.wp-block-ept-pe-update-place #map-popup #confirm-location{
+.wp-block-ept-pe-update-place #map-popup #popup-container>button{
   position: relative;
-  top:1rem;
   left:10vw;
   background-color: white;
-  color:black;
+  color:rgb(0 0 0 / 0.7);
   padding:1rem;
   border-radius: 1rem;
   z-index:1000;
+}
+
+.wp-block-ept-pe-update-place #map-popup #popup-container #confirm-location{
+  top:1rem;
+  padding-top:0.7rem;
+  padding-bottom:0.7rem;
+}
+
+.wp-block-ept-pe-update-place #map-popup #popup-container .close-popup{
+  top:-1rem;
+  padding-top:0.5rem;
+  padding-bottom:0.5rem;
+}
+
+.wp-block-ept-pe-update-place #map-popup #popup-container>button:hover {
+  color:rgb(0 0 0 / 0.3);
 }
