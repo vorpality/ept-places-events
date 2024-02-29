@@ -9,7 +9,7 @@ import { mapSelect } from '../../common/services/selectFromMap.js';
 document.addEventListener('DOMContentLoaded',async () => {
   const post_id = document.querySelector('.wp-block-ept-pe-update-place').getAttribute('data-post-id');
 
-  const  startingImages =(post_id && post_id !== "0")? await getImages(post_id):[];
+  const startingImages =(post_id && post_id !== "0")? await getImages(post_id):[];
   const rootElement = document.querySelector('.file-upload-wrapper');
   if (rootElement) {
       const root = createRoot(rootElement);
@@ -36,8 +36,8 @@ document.addEventListener('DOMContentLoaded',async () => {
     const description = add_place_form.querySelector('#place-description').value;
     const location = add_place_form.querySelector('#place-location').value;
     const primaryImage = add_place_form.querySelector('#post-primary-image-id').value;
-    const lat = add_place_form.getElementById('place-lat').value;
-    const lng = add_place_form.getElementById('place-lng').value;
+    const lat = add_place_form.querySelector('#place-lat').value;
+    const lng = add_place_form.querySelector('#place-lng').value;
     event.preventDefault();
     add_place_form_fieldset.removeAttribute('disabled');
      
@@ -102,7 +102,12 @@ document.addEventListener('DOMContentLoaded',async () => {
     lng : document.getElementById('place-lng'),
     input: document.getElementById('place-location')
   }
-  mapSelect({modal,tempFields,mainFields});
+  const startingPosition = mainFields.lat.value ? {
+    lat : parseFloat(mainFields.lat.value),
+    lng : parseFloat(mainFields.lng.value)
+  } : null;
+  console.log(mainFields.lat)
+  mapSelect({modal,tempFields,mainFields,startingPosition});
 });
 
 

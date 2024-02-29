@@ -7,14 +7,20 @@ function ept_pe_update_place_form_render_cb($atts) {
   if (!get_user_meta($user->ID, 'business_owner', true) && !is_admin()){
     wp_redirect(home_url());
   }
-
+  $header = __("Add new place", 'e-potis');
   $current_post = 0;
   $current_title = '';
   $current_description = '';
+
   if(isset($_GET['pid'])) {
+    $header = __("Edit place", 'e-potis');
     $current_post = $_GET['pid'];
     $current_title = get_the_title($current_post);
     $current_description = get_the_excerpt($current_post);
+    $current_location = get_post_meta($current_post, 'place_location', true);
+    $current_lat = get_post_meta($current_post, 'lat', true);
+    $current_lng = get_post_meta($current_post, 'lng', true);
+
   }
 
 
@@ -34,7 +40,7 @@ function ept_pe_update_place_form_render_cb($atts) {
 
       <fieldset>
         <h2 id ="add-new-place-label">
-          <?php echo (__('Add new place: ','e-potis'));?>
+          <?php echo $header;?>
         </h2>
         <h3>
           <?php echo (__('Place Title','e-potis'));?>
@@ -58,9 +64,15 @@ function ept_pe_update_place_form_render_cb($atts) {
         <h3>
           <?php echo (__('Place location','e-potis'));?>
         </h3>
-        <input name="place_location" id = "place-location">
-        <input type="hidden" id = "place-lat"> 
-        <input type="hidden" id = "place-lng"> 
+        <input name="place_location" id = "place-location" 
+          value = "<?php echo $current_location; ?>"
+          >
+        <input type="hidden" id = "place-lat"
+          value = "<?php echo $current_lat; ?>"
+          >
+        <input type="hidden" id = "place-lng"
+          value = "<?php echo $current_lng; ?>"
+          >
         <button type="button" id = "map-select">
           <?php echo __('Select from map', 'e-potis'); ?>
         </button>

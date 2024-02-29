@@ -60,7 +60,7 @@ function ept_pe_rest_api_update_event_handler($request){
   $title = $request->get_param('event_title');
   $description = '';
   $place_id = $request->get_param('event_location');
-
+  $event_date = $request->get_param('event_date');
   if ($request->get_param('event_description') != null){
     $description = $request->get_param('event_description');
   }
@@ -73,6 +73,7 @@ function ept_pe_rest_api_update_event_handler($request){
     'post_type' => 'event',
     'meta_input' => array(
       'event_location' => $place_id,
+      'event_date' => $event_date
     ),
   );
   if ($request->get_param('post_id') == 0){

@@ -62,7 +62,7 @@ function ept_pe_single_post_details_render_cb($atts) {
   <div class ="wp-block-ept-single-post-details">
     <?php if ($canEdit){ ?>
       <div id = "edit-line"> 
-        <button id = "edit-button">
+        <button id = "edit-button" postType = "<?php echo($postType); ?>">
           <i class="bi bi-pencil-square"></i>
         </button>
       </div>

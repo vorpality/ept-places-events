@@ -1,4 +1,6 @@
 export const mapSelect = (props) => {
+
+  const startingPosition = props.startingPosition || {lat:37.98, lng:23.725}
   const mainFields = {
     lat : props.mainFields.lat,
     lng : props.mainFields.lng,
@@ -20,12 +22,14 @@ export const mapSelect = (props) => {
 
   const closeModal = () => {
     modal.content.style.display = 'none';
+    document.body.classList.remove('no-scroll');
   };
 
   modal.openButton.addEventListener('click', () => {
 
     modal.content.style.display = 'block';
-    initMapPopup(tempFields); 
+    document.body.classList.add('no-scroll'); 
+    initMapPopup(tempFields, startingPosition, !!props.startingPosition); 
   });
   
   modal.confirm.addEventListener('click', async () => {
@@ -58,16 +62,23 @@ export const mapSelect = (props) => {
   });
 }
 
-async function initMapPopup(fields) {
+async function initMapPopup(fields, defaultPos, hasSelection) {
   const {AdvancedMarkerElement} = await google.maps.importLibrary("marker")
   const map = new google.maps.Map(document.getElementById('map-canvas'), {
     mapId : 'select-place-map',
-    center: { lat: 37.98, lng: 23.725 }, // Default location
+    center: { lat: defaultPos.lat, lng: defaultPos.lng }, // Default location
     zoom: 12,
   });
-
-
   let markers = [];
+  if (hasSelection){
+    markers.push(new AdvancedMarkerElement ({
+      position: { lat: defaultPos.lat, lng: defaultPos.lng },
+      map: map,
+      draggable: true,
+    }));
+  }
+
+  
   map.addListener("click", (mapsMouseEvent) => {
     const latlng = mapsMouseEvent.latLng.toJSON();
     if (markers[0]){

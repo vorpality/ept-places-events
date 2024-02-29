@@ -84,9 +84,10 @@
   min-width: 5rem;
   color:black;
   padding:2px;
-  /*
-  background:url( "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-caret-down' viewBox='0 0 16 16'%3E%3Cpath d='M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659'/%3E%3C/svg%3E");
-*/
+}
+
+.wp-block-ept-pe-update-event #event-date {
+  width:2rem;
 }
 
 .wp-block-ept-pe-update-event .btn-wrapper {
@@ -247,16 +248,3 @@
   background-color: inherit;
 }
 
-.wp-block-ept-pe-update-event #map-popup{
-  padding: 2rem;
-  position:absolute;
-  top:0;
-  left:0;
-  display:none;
-  z-index: 1000;
-}
-
-.wp-block-ept-pe-update-event #map-popup #map-canvas{
-  width:50vw;
-  height: 50vh;
-}

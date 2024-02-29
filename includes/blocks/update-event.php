@@ -8,13 +8,18 @@ function ept_pe_update_event_form_render_cb($atts) {
   }
   $table_name = $wpdb->prefix . 'bar_owners';
 
+  $header = __("Add new event", 'e-potis');
   $current_post = 0;
   $current_title = '';
   $current_description = '';
+  $current_date = date("Y-m-d");
+
   if(isset($_GET['pid'])) {
+    $header = __("Edit event", 'e-potis');
     $current_post = $_GET['pid'];
     $current_title = get_the_title($current_post);
     $current_description = get_the_excerpt($current_post);
+    $current_date = get_post_meta($current_post, 'event_date', true);
   }
 
   $query = $wpdb->prepare(
@@ -47,7 +52,7 @@ function ept_pe_update_event_form_render_cb($atts) {
 
       <fieldset>
         <h2 id ="add-new-event-label">
-          <?php echo (__('Add new event: ','e-potis'));?>
+          <?php echo $header;?>
         </h2>
         <h3>
           <?php echo (__('Event Title','e-potis'));?>
@@ -68,6 +73,14 @@ function ept_pe_update_event_form_render_cb($atts) {
           name="event_description" 
           id="event-description" 
         ></textarea>      
+        <h3>
+          <?php echo (__('Event date','e-potis'));?>
+        </h3>
+        <input
+          type = "date"
+          value = <?php echo $current_date; ?>
+          id = "event-date"
+          />
         <h3>
           <?php echo (__('Event location','e-potis'));?>
         </h3>

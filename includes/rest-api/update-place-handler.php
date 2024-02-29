@@ -6,9 +6,9 @@ function ept_pe_rest_api_update_place_handler($request){
   $file_handler = 'place_image';
   $attach_ids = [];
   $primary_id = 0;
-  if (!empty($_FILES['post_images']['name'])) {
-    $files = $_FILES['post_images'];
-    for ($i = 1; $i <= count($files['name']); $i++) {
+  if (!empty($_FILES['place_images']['name'])) {
+    $files = $_FILES['place_images'];
+    for ($i = 0; $i <= count($files['name']); $i++) {
       if (!empty($files['name'][$i])) {
         $_FILES['place_image_single']['name'] = $files['name'][$i];
         $_FILES['place_image_single']['type'] = $files['type'][$i];
@@ -60,8 +60,8 @@ function ept_pe_rest_api_update_place_handler($request){
   $title = $request->get_param('place_title');
   $description = '';
   $address = $request->get_param('place_location');
-  $lat = $request->get_param('lat');
-  $lng = $request->get_param('lng');
+  $place_lat = $request->get_param('lat');
+  $place_lng = $request->get_param('lng');
   if ($request->get_param('place_description') != null){
     $description = $request->get_param('place_description');
   }
