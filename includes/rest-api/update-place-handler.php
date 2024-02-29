@@ -59,8 +59,9 @@ function ept_pe_rest_api_update_place_handler($request){
 
   $title = $request->get_param('place_title');
   $description = '';
-  $place_id = $request->get_param('place_location');
-
+  $address = $request->get_param('place_location');
+  $lat = $request->get_param('lat');
+  $lng = $request->get_param('lng');
   if ($request->get_param('place_description') != null){
     $description = $request->get_param('place_description');
   }
@@ -72,7 +73,9 @@ function ept_pe_rest_api_update_place_handler($request){
     'post_status' => 'publish',
     'post_type' => 'place',
     'meta_input' => array(
-      'place_location' => $place_id,
+      'place_location' => $address,
+      'lat' =>  $place_lat,
+      'lng' => $place_lng
     ),
   );
   if ($request->get_param('post_id') == 0){

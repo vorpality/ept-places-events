@@ -36,6 +36,8 @@ document.addEventListener('DOMContentLoaded',async () => {
     const description = add_place_form.querySelector('#place-description').value;
     const location = add_place_form.querySelector('#place-location').value;
     const primaryImage = add_place_form.querySelector('#post-primary-image-id').value;
+    const lat = add_place_form.getElementById('place-lat').value;
+    const lng = add_place_form.getElementById('place-lng').value;
     event.preventDefault();
     add_place_form_fieldset.removeAttribute('disabled');
      
@@ -45,6 +47,8 @@ document.addEventListener('DOMContentLoaded',async () => {
     formData.append('place_title', title);
     formData.append('place_description', description);
     formData.append('place_location', location);
+    formData.append('lat', lat);
+    formData.append('lng', lng);
     window.currentSelectedFiles.forEach((file, index) => {
       if (file.isStartingImage){
         formData.append(`existing_images[]`, file.id);
