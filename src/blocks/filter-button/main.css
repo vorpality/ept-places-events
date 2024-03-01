@@ -24,6 +24,7 @@
   left:-400px;
   height: 100%;
   top:0px;
+  z-index: 11;
 }
 
 .wp-block-ept-pe-filter-button .show-filter {

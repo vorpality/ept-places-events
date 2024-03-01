@@ -4,7 +4,7 @@ import { FileUploadComponent } from '../../common/components/FileUploadComponent
 import { createRoot } from "react-dom/client";
 import { updateEvent } from './services/apiServices.js';
 
-
+ 
 
 
 document.addEventListener('DOMContentLoaded',async () => {

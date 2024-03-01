@@ -6,7 +6,10 @@ function ept_pe_filter_button_render_cb($atts){
     <button class = "filter-button">
       <i class="bi bi-funnel"></i>
     </button>
-    <div class = "filter-menu">
+    <div class = "filter-menu"  id="filter-root">
+    <?php
+      
+      /*
       <form class = "filter-form">
         <div class = "wrap-duo">
           <label> Location </label>
@@ -27,9 +30,7 @@ function ept_pe_filter_button_render_cb($atts){
       </button>
       </form>
       
-      <?php
-      
-      /*foreach($atts['content'] as $field){
+      foreach($atts['content'] as $field){
 
       }
       */

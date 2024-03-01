@@ -106,7 +106,6 @@ document.addEventListener('DOMContentLoaded',async () => {
     lat : parseFloat(mainFields.lat.value),
     lng : parseFloat(mainFields.lng.value)
   } : null;
-  console.log(mainFields.lat)
   mapSelect({modal,tempFields,mainFields,startingPosition});
 });
 

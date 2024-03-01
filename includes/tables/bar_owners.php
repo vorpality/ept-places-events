@@ -1,8 +1,5 @@
 <?php
-function ept_pe_create_tables(){
-  ept_create_bar_owners_table();
-  ept_add_foreign_keys_to_bar_owners_table();
-}
+
 function ept_create_bar_owners_table() {
   global $wpdb;
   $table_name = $wpdb->prefix . 'bar_owners';
@@ -38,10 +35,20 @@ function ept_add_foreign_keys_to_bar_owners_table() {
   global $wpdb;
   $table_name = $wpdb->prefix . 'bar_owners';
 
-  $sql = "ALTER TABLE $table_name
-          ADD CONSTRAINT fk_bar_owners_user_id FOREIGN KEY (user_id) REFERENCES {$wpdb->prefix}users(ID) ON DELETE SET NULL,
-          ADD CONSTRAINT fk_bar_owners_post_id FOREIGN KEY (post_id) REFERENCES {$wpdb->prefix}posts(ID) ON DELETE CASCADE;";
-  
-  require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-  $wpdb->query($sql);
+  $user_fk_exists = $wpdb->get_var("SELECT CONSTRAINT_NAME FROM information_schema.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = '$table_name' AND CONSTRAINT_NAME = 'fk_bar_owners_user_id'");
+  $post_fk_exists = $wpdb->get_var("SELECT CONSTRAINT_NAME FROM information_schema.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = '$table_name' AND CONSTRAINT_NAME = 'fk_bar_owners_post_id'");
+
+  $sql = "";
+
+  if (!$user_fk_exists) {
+      $sql .= "ALTER TABLE $table_name ADD CONSTRAINT fk_bar_owners_user_id FOREIGN KEY (user_id) REFERENCES {$wpdb->prefix}users(ID) ON DELETE SET NULL;";
+  }
+  if (!$post_fk_exists) {
+      $sql .= " ALTER TABLE $table_name ADD CONSTRAINT fk_bar_owners_post_id FOREIGN KEY (post_id) REFERENCES {$wpdb->prefix}posts(ID) ON DELETE CASCADE;";
+  }
+
+  if (!empty($sql)) {
+      require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+      $wpdb->query($sql);
+  }
 }
