@@ -15,9 +15,9 @@ function ept_pe_single_post_details_render_cb($atts) {
       if(count($userFavorites) > 0){
         $isFavorite = (in_array(strval($postID), $userFavorites));
       }
+    }
     $place_lat = get_post_meta($postID,'lat',true);
     $place_lng = get_post_meta($postID,'lng',true);
-    }
   }
   else if ($postType == 'event'){
     $date = get_post_meta($postID,'event_date',true);

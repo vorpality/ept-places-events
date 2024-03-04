@@ -32,10 +32,12 @@ addEventListener("DOMContentLoaded", () => {
   }
 
   const edit_button = document.querySelector('.wp-block-ept-single-post-details #edit-button');
-  const postType = edit_button.getAttribute("postType");
-  edit_button.addEventListener('click', (event) => {
-    event.preventDefault();
-    window.location.href = `${window.location.origin}/edit-${postType}?pid=${postID}`;
-  })
+  if (edit_button) {
+    const postType = edit_button.getAttribute("postType");
+    edit_button.addEventListener('click', (event) => {
+      event.preventDefault();
+      window.location.href = `${window.location.origin}/edit-${postType}?pid=${postID}`;
+    })
+  }
 });
 
