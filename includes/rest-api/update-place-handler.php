@@ -74,8 +74,6 @@ function ept_pe_rest_api_update_place_handler($request){
     'post_type' => 'place',
     'meta_input' => array(
       'place_location' => $address,
-      'lat' =>  $place_lat,
-      'lng' => $place_lng
     ),
   );
   if ($request->get_param('post_id') == 0){
@@ -98,6 +96,7 @@ function ept_pe_rest_api_update_place_handler($request){
     }
     update_post_meta($post_id, 'primary_image', $primary_id);
   }
+  $result = update_place_location($post_id, $place_lat, $place_lng);
   $response['prim'] = $primary_id;
   $response['url']= get_the_permalink($post_id);
   $response['status'] = 2;

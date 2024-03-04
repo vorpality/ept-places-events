@@ -33,5 +33,9 @@ function ept_pe_rest_api_init(){
     ]);
 
 
-
+    register_rest_route('ept/v1', '/filter-posts', array(
+        'methods' => 'POST',
+        'callback' => 'ept_pe_rest_api_handle_filter_posts',
+        'permission_callback' => '__return_true', // Adjust permission callback as needed
+    ));
   }

@@ -17,16 +17,7 @@ function ept_pe_place_publish_place_location($new_status, $old_status, $post){
       'place_location', 
       $_POST['ept_pe_place_location']
     );
-    update_post_meta(
-      $post->ID, 
-      'lat', 
-      $_POST['ept_pe_lat']
-    );
-    update_post_meta(
-      $post->ID, 
-      'lng', 
-      $_POST['ept_pe_lng']
-    );
+    update_place_location($post->ID,$_POST['ept_pe_lat'],$_POST['ept_pe_lng']);
   }
 }
 

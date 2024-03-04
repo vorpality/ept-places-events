@@ -18,9 +18,7 @@ function ept_pe_update_place_form_render_cb($atts) {
     $current_title = get_the_title($current_post);
     $current_description = get_the_excerpt($current_post);
     $current_location = get_post_meta($current_post, 'place_location', true);
-    $current_lat = get_post_meta($current_post, 'lat', true);
-    $current_lng = get_post_meta($current_post, 'lng', true);
-
+    list($current_lat, $current_lng) = get_location($current_post);
   }
 
 

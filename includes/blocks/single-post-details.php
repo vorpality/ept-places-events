@@ -16,8 +16,8 @@ function ept_pe_single_post_details_render_cb($atts) {
         $isFavorite = (in_array(strval($postID), $userFavorites));
       }
     }
-    $place_lat = get_post_meta($postID,'lat',true);
-    $place_lng = get_post_meta($postID,'lng',true);
+    list($place_lat, $place_lng) = get_location($postID);
+    $distance = round(get_distance($postID) / 1000, 1);
   }
   else if ($postType == 'event'){
     $date = get_post_meta($postID,'event_date',true);
@@ -94,7 +94,13 @@ function ept_pe_single_post_details_render_cb($atts) {
             <span id="place-location">
             <?php echo(__('Location', 'e-potis')); ?> : 
               <?php echo($location); ?>
-            </span>
+            </span> <?php
+            if (!empty($distance)){ ?>
+            <span id="place-distance">
+              <?php echo (__('Distance', 'e-potis')); ?> : 
+              <?php echo($distance); ?> km
+            </span> <?php
+            } ?>
           </div>
         </div>
         <div id="place-map" 
