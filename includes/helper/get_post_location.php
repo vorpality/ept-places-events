@@ -4,10 +4,22 @@ function get_location($postID) {
   // Ensure postID is an integer to prevent SQL injection
   $postID = intval($postID);
 
-  // Query to retrieve POINT as text
+  $post_type = get_post_type($postID);
+  if ($post_type == 'event') {
+    $events_places_table = $wpdb->prefix . 'events_places';
+    $placeID = $wpdb->get_var($wpdb->prepare(
+      "SELECT place_id FROM $events_places_table WHERE event_id = %d",
+      $postID
+    ));
+    if (!$placeID) {
+      return null; // No associated place found for the event
+    }
+  } else {
+    $placeID = $postID; // For places, the place ID is the post ID
+  }
   $query = $wpdb->prepare(
       "SELECT ST_AsText(location) AS location FROM {$wpdb->prefix}post_locations WHERE post_id = %d",
-      $postID
+      $placeID
   );
 
   // Execute the query

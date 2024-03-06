@@ -31,3 +31,37 @@ function update_place_location($post_id, $lat, $lng) {
 
   return true;
 }
+
+function update_event_location($event_id, $place_id) {
+    global $wpdb;
+    // Ensure input is integer to prevent SQL injection
+    $event_id = intval($event_id);
+    $place_id = intval($place_id);
+
+    // The name of the table
+    $table_name = $wpdb->prefix . 'events_places';
+
+    // Check if an entry already exists
+    $exists = $wpdb->get_var($wpdb->prepare(
+        "SELECT COUNT(*) FROM $table_name WHERE event_id = %d",
+        $event_id
+    ));
+
+    if ($exists) {
+        // Update the existing entry
+        $wpdb->update(
+            $table_name,
+            ['place_id' => $place_id], // Data to update
+            ['event_id' => $event_id]  // Where clause
+        );
+    } else {
+        // Insert a new entry
+        $wpdb->insert(
+            $table_name,
+            [
+                'event_id' => $event_id,
+                'place_id' => $place_id
+            ]
+        );
+    }
+}

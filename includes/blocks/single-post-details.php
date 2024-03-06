@@ -7,6 +7,7 @@ function ept_pe_single_post_details_render_cb($atts) {
   $isFavorite = false;
   $postType = get_post_type($postID);
   $canEdit = does_own($userID, $postID);
+  
   //Prepare 
   if ($postType == 'place'){
     $location = get_post_meta($postID,'place_location',true);
@@ -17,7 +18,7 @@ function ept_pe_single_post_details_render_cb($atts) {
       }
     }
     list($place_lat, $place_lng) = get_location($postID);
-    $distance = round(get_distance($postID) / 1000, 1);
+
   }
   else if ($postType == 'event'){
     $date = get_post_meta($postID,'event_date',true);
@@ -32,7 +33,7 @@ function ept_pe_single_post_details_render_cb($atts) {
       $placeUrl = '';
     }
   }
-
+  $distance = round(get_distance($postID) / 1000, 1);
   $thumbnail_id = get_post_meta($postID, 'primary_image', true);
   $thumbnail_id = ($thumbnail_id == '')? '' : (int) $thumbnail_id;
 
@@ -121,6 +122,13 @@ function ept_pe_single_post_details_render_cb($atts) {
                 <?php echo($placeTitle); ?>
               </a>
             </span>
+            <?php
+            if (!empty($distance)){ ?>
+            <span id="event-distance">
+              <?php echo (__('Distance', 'e-potis')); ?> : 
+              <?php echo($distance); ?> km
+            </span> <?php
+            } ?>
           </div>
         </div> <?php 
       } ?>

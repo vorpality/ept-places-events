@@ -1,3 +1,5 @@
+
+
 export const mapSelect = (props) => {
 
   const startingPosition = props.startingPosition || {lat:37.98, lng:23.725}

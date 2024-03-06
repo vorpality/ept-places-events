@@ -14,12 +14,16 @@ function ept_pe_update_event_form_render_cb($atts) {
   $current_description = '';
   $current_date = date("Y-m-d");
 
+
   if(isset($_GET['pid'])) {
     $header = __("Edit event", 'e-potis');
     $current_post = $_GET['pid'];
     $current_title = get_the_title($current_post);
     $current_description = get_the_excerpt($current_post);
-    $current_date = get_post_meta($current_post, 'event_date', true);
+    $event_date = get_post_meta($current_post, 'event_date', true);
+        if(!empty($event_date)) {
+        $current_date = $event_date;
+    }
   }
 
   $query = $wpdb->prepare(

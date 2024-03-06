@@ -4,7 +4,7 @@ export const mapAutoComplete = (fields) => {
   if (field != null) {
     var geocoder;
     var script = document.createElement('script');
-    script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDY56cwNRUcmVLV3LpSUUwjPWx4TQJHr3I&libraries=places&callback=initMap';
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDY56cwNRUcmVLV3LpSUUwjPWx4TQJHr3I&libraries=places&callback=initMap`;
     script.async = true;
     window.initMap = function() {
       
