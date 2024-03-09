@@ -11,7 +11,9 @@ function ept_pe_update_place_form_render_cb($atts) {
   $current_post = 0;
   $current_title = '';
   $current_description = '';
-
+  $current_location = '';
+  $current_lat = '';
+  $current_lng = '';
   if(isset($_GET['pid'])) {
     $header = __("Edit place", 'e-potis');
     $current_post = $_GET['pid'];

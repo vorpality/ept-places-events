@@ -1,8 +1,7 @@
 
-
+ 
 export const mapSelect = (props) => {
-
-  const startingPosition = props.startingPosition || {lat:37.98, lng:23.725}
+  const startingPosition = !isNaN(props.startingPosition) ? props.startingPosition : {lat:37.98, lng:23.725}
   const mainFields = {
     lat : props.mainFields.lat,
     lng : props.mainFields.lng,

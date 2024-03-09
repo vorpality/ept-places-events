@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded',async () => {
     lng : document.getElementById('place-lng'),
     input: document.getElementById('place-location')
   }
-  const startingPosition = mainFields.lat.value ? {
+  const startingPosition = (mainFields.lat.value != null) ? {
     lat : parseFloat(mainFields.lat.value),
     lng : parseFloat(mainFields.lng.value)
   } : null;
