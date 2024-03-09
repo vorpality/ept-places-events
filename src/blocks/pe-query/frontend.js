@@ -1,9 +1,10 @@
 import { createRoot } from "react-dom/client";
 import { FavoritePost } from '../../common/components/FavoritePost.js';
 import { QueryImageBox } from './components/QueryImageBox.js';
+import { SortDropdown } from "./components/sortBy.js";
 
 document.addEventListener('DOMContentLoaded', () => {
-  
+   
   const blocks = document.querySelectorAll('.wp-block-ept-pe-query .post-buttons')
   blocks.forEach( block => {
   const postID = parseInt(block.dataset.postId)
@@ -34,6 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
       />);
     }
   });
+
+  const sortRoot = createRoot(document.getElementById('sort-root'));
+  sortRoot.render(<SortDropdown />);
+
 
 });
 

@@ -118,7 +118,8 @@ function ept_pe_query_render_cb($atts) {
   }
 
   ob_start(); ?>
-  <div class="wp-block-ept-pe-query"> <?php
+  <div class="wp-block-ept-pe-query"> 
+    <div id = 'sort-root'></div> <?php
   if ($queryType == 'places' || $queryType == 'both'){
     $query = new WP_Query($place_args);
     if($query->have_posts()) {

@@ -6,7 +6,7 @@ function ept_pe_rest_api_handle_filter_posts($request) {
   $type = isset($params['type']) ? sanitize_text_field($params['type']) : '';
   $distance = isset($params['distance']) ? sanitize_text_field($params['distance']) : '';
   $date = isset($params['date']) ? sanitize_text_field($params['date']) : '';
-  $post_type = isset($params['post_type']) ? sanitize_text_field($params['post_type']) : '';
+  $post_type = isset($params['post_type']) ? sanitize_text_field($params['post_type']) : 'post';
 
   $user_id = get_current_user_id();
   list($user_lat, $user_lng) = get_location($post_id);

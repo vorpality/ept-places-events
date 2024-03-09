@@ -230,3 +230,43 @@
   opacity: 1;
   visibility: visible;
 }
+
+.wp-block-ept-pe-query .custom-dropdown {
+    position: relative;
+    user-select: none;
+    width: 10%;
+    min-width:160px;
+    margin-left:1rem;
+
+  }
+  
+.wp-block-ept-pe-query .custom-dropdown .dropdown-arrow{
+    font-size:.75rem;
+}
+ .wp-block-ept-pe-query .custom-dropdown-selection {
+    padding: 8px;
+    background: inherit;
+    border: 1px solid #ccc;
+    cursor: pointer;
+  }
+  
+ .wp-block-ept-pe-query .custom-dropdown-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid #ccc;
+    z-index: 1000;
+  }
+  
+ .wp-block-ept-pe-query .custom-dropdown-option {
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+ .wp-block-ept-pe-query .custom-dropdown-option:hover,
+ .wp-block-ept-pe-query .custom-dropdown-option.selected {
+    background-color: #f0f0f0;
+  }
+  
