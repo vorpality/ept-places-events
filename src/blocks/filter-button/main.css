@@ -20,25 +20,25 @@
   display: block;
   position: fixed;
   overflow: hidden;
-  width: 400px;
-  left:-400px;
+  width: 30vw;
+  left: -30vw;
   height: 100%;
   top:0px;
   z-index: 11;
+  background-color: white;
 }
 
-.wp-block-ept-pe-filter-button .show-filter {
-  display:block;
-  position: fixed;
+.wp-block-ept-pe-filter-button .filter-menu.show-filter {
   left: 0px;
-  top:0px;
-  width: 30%;
-  height: 100%;
-  transition: .5s;
-  background:white;
+  transition: .5s ease;
 }
 
 .wp-block-ept-pe-filter-button .filter-wrapper:hover .filter-button {
   border-radius:10rem;
   background: white;
+}
+
+.wp-block-ept-pe-filter-button .close-button {
+  z-index:12;
+  color:black;
 }

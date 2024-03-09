@@ -8,36 +8,75 @@ function ept_pe_query_render_cb($atts) {
   $heading = esc_html($atts['content']);
   $showTitle = $atts['showCategory'];
   $category = '';
-  $searchTerms = (isset($_GET["s"])) ? $_GET['s'] : '' ;
   $queryType = $atts['queryType'];
   $view = $atts['view'];
+
+  $searchTerms = (isset($_GET["s"])) ? $_GET['s'] : '' ;
+  $order = isset($_GET['orderby']) ? $_GET['orderby'] : '';
+
+  $preElim = [];
+  if ($order == 'distance'){
+    $preElim = sort_places();
+  }
+
   if ($showTitle){
     $heading = substr(get_the_archive_title(),10);
     $category = get_queried_object_id();
   }
 
+
+
   switch ($view){
     case ("favorites view"):
+      if (isset($preElim)){
+        usort($favoriteIDs, function($a, $b) use ($preElim) {
+          $posA = array_search($a, $preElim);
+          $posB = array_search($b, $preElim);
+      
+          if ($posA === $posB) {
+              return 0;
+          }
+      
+          return ($posA < $posB) ? -1 : 1;
+      });
+      }
       $place_args = [
         'post__in'=> $favoriteIDs,
         'post_type' => 'place',
         'posts_per_page' => $atts['count'],
+        'orderby' => 'post__in'
       ];
+      
       $event_args = [
         'post__in'=> $favoriteIDs,
         'post_type' => 'event',
         'posts_per_page' => $atts['count'],
       ];
+
       break;
     case ("all view"):
       $place_args = [
+        'post__in' => $preElim,
         'post_type' => 'place',
-        'posts_per_page' => $atts['count']
+        'posts_per_page' => $atts['count'],
+        'orderby' => 'post__in'
       ];
       $event_args =[
+        'post__in' => $preElim,
         'post_type' => 'event',
-        'posts_per_page' => $atts['count']
+        'posts_per_page' => $atts['count'],
+        'orderby' => 'post__in'
       ];
+      if ($order){
+        $place_args += [
+          'post__in' => $preElim,
+          'orderby' => 'post_in'
+        ];
+        $event_args += [
+          'post__in' => $preElim,
+          'orderby' => 'post_in'
+        ];
+      }
       break;
     case ("normal view"):
       $categoryIDs = array_map(function($term) {
@@ -59,6 +98,16 @@ function ept_pe_query_render_cb($atts) {
         'cat' => $category,
         's' => $searchTerms
       ];
+      if ($order){
+        $place_args += [
+          'post__in' => $preElim,
+          'orderby' => 'post_in'
+        ];
+        $event_args += [
+          'post__in' => $preElim,
+          'orderby' => 'post_in'
+        ];
+      }
       if (!empty($categoryIDs)) {
         foreach($categoryIDs as $cat)
           $place_args['cat'] .= $cat .',' ;

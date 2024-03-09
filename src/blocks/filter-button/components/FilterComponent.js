@@ -42,7 +42,8 @@ const FilterComponent = ({ postType }) => {
   };
 
   return (
-    <div className="filter-menu">
+    <>
+      <button id="close-filter">X</button>
       <form onSubmit={applyFilters} className="filter-form">
         <div className="wrap-duo">
           <label>Location</label>
@@ -92,7 +93,7 @@ const FilterComponent = ({ postType }) => {
 
         <button type="submit">Apply filters</button>
       </form>
-    </div>
+    </>
   );
 };
 

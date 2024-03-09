@@ -32,20 +32,15 @@ function get_distance($postID) {
   // This uses the ST_Distance_Sphere function available in MySQL 5.7.6 and later
   // For earlier versions, consider using a different approach or a custom stored procedure
   $query = $wpdb->prepare("
-    SELECT p.ID, 
-           ST_Distance_Sphere(POINT(%f, %f), pl.location) AS distance,
-           p.post_type
+    SELECT ST_Distance_Sphere(POINT(%f, %f), pl.location) AS distance
     FROM {$wpdb->prefix}posts p
     LEFT JOIN {$wpdb->prefix}post_locations pl ON p.ID = pl.post_id
     LEFT JOIN {$wpdb->prefix}events_places ep ON p.ID = ep.event_id
-    WHERE p.post_type IN ('place', 'event') AND (pl.location IS NOT NULL OR ep.place_id IS NOT NULL)
-    GROUP BY p.ID
-    ORDER BY distance ASC
-  ", $userLng, $userLat);
+    WHERE p.ID = {$placeID}
+  ", $userLat, $userLng);
 
   // Execute the query
   $distance = $wpdb->get_var($query);
-
   // Return the distance in meters
   return $distance;
 }
