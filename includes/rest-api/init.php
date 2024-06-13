@@ -38,4 +38,6 @@ function ept_pe_rest_api_init(){
         'callback' => 'ept_pe_rest_api_handle_filter_posts',
         'permission_callback' => '__return_true', // Adjust permission callback as needed
     ));
+
+
   }
