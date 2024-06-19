@@ -40,4 +40,12 @@ function ept_pe_rest_api_init(){
     ));
 
 
+    register_rest_route('ept/v1', '/app-posts', array(
+        'methods' => 'GET',
+        'callback' => 'ept_pe_rest_api_handle_app_posts',
+        'permission_callback' => '__return_true', // Adjust permission callback as needed
+    ));
+    
+    ept_register_meta_fields();
+
   }
