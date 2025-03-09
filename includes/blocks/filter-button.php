@@ -6,7 +6,7 @@ function ept_pe_filter_button_render_cb($atts){
     <button class = "filter-button">
       <i class="bi bi-funnel"></i>
     </button>
-    <div class = "filter-menu"  id="filter-root">
+    <div id="filter-root">
     <?php
       
       /*

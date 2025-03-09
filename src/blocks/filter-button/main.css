@@ -14,9 +14,10 @@
   padding-right: 0.5rem;
 }
 
-.wp-block-ept-pe-filter-button .filter-menu {
+.wp-block-ept-pe-filter-button #filter-menu {
   padding-top:2rem;
   padding-left:1rem;
+  padding-right:1rem;
   display: block;
   position: fixed;
   overflow: hidden;
@@ -26,11 +27,20 @@
   top:0px;
   z-index: 11;
   background-color: white;
+ 
+  transition: left 0.5s ease; 
 }
 
-.wp-block-ept-pe-filter-button .filter-menu.show-filter {
+.wp-block-ept-pe-filter-button #screener {
+  display :block;
+  position: fixed;
+  overflow: hidden;
+  width : 100vw;
+  height : 100vh;
+}
+
+.wp-block-ept-pe-filter-button #filter-menu.show-filter {
   left: 0px;
-  transition: .5s ease;
 }
 
 .wp-block-ept-pe-filter-button .filter-wrapper:hover .filter-button {
@@ -41,4 +51,100 @@
 .wp-block-ept-pe-filter-button .close-button {
   z-index:12;
   color:black;
+}
+
+
+/* Filter Menu Container */
+.form-data {
+  position: fixed;
+  top: 0;
+  right: -320px; /* Off-screen initially */
+  width: 300px;
+  height: 100%;
+  background-color: #ffffff;
+  box-shadow: -4px 0 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  transition: right 0.4s ease;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+/* Active state to slide in the menu */
+.form-data.active {
+  right: 0;
+}
+
+/* Duo Wrap Container */
+.wrap-duo {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+/* Style each paired element */
+.wrap-duo > * {
+  flex: 1;
+  min-width: 45%;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Additional form styling */
+.form-data h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.form-data label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+.form-data input[type="text"],
+.form-data select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Example button styling */
+.form-data button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007BFF;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.form-data button:hover {
+  background-color: #0056b3;
+}
+
+.apply-button {
+  border-radius: 20rem;
+  padding: 0 0.5rem;
+}
+
+.close-button {
+  margin: .5rem 0;
+  background: none;
+  opacity:0.7;
+}
+
+.close-button:hover {
+  opacity:1;
 }

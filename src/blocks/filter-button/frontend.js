@@ -3,17 +3,20 @@ import FilterComponent from './components/FilterComponent.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const button = document.querySelector('.filter-button');
-  const menu = document.querySelector('.filter-menu');
+  const rootElement = document.getElementById('filter-root');
+  const root = createRoot(rootElement);
+  root.render(<FilterComponent setFilterMenu={(el) => (menu = el)} />);
+  let menu = null;
 
-    button.addEventListener( 'click' , event => {
-      event.preventDefault()
-      menu.classList.add('show-filter');
-      const rootElement = document.getElementById('filter-root');
-      if (rootElement) {
-        const root = createRoot(rootElement);
-        root.render(<FilterComponent />);
-      }
-    })
+  button.addEventListener('click', (event) => {
+    event.preventDefault();
+    menu.classList.add('show-filter');
+  });
+});
+
+  
+
+
   
 /*
   const filter_form = document.querySelector('.filter-form');
@@ -31,6 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentUrl = location.protocol + '//' + location.host + location.pathname
     window.location = (currentUrl + filterString);
 */
-})
+
 
 

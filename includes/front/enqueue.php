@@ -26,8 +26,10 @@ function ept_pe_enqueue_rest_shorts() {
         'update' => esc_url_raw(rest_url('ept/v1/update-place'))
     ]);
     $postURLS = json_encode([
-        'retrieve' => esc_url_raw(rest_url('ept/v1/retrieve-post'))
+        'retrieve' => esc_url_raw(rest_url('ept/v1/retrieve-post')),
+        'filter' => esc_url_raw(rest_url('ept/v1/filter-posts'))
     ]);
+
     
 
     wp_add_inline_script(
