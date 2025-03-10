@@ -8,6 +8,8 @@ const FilterComponent = ({ postType = "post", setFilterMenu, setPoiField }) => {
   const [date, setDate] = useState('');
   const [showing, setShowing] = useState(false);
   const [order, setOrder] = useState('relevance');
+  const [lat, setLat] = useState('');
+  const [lng, setLng] = useState('');
   const menuRef = useRef(null);
   const poiRef = useRef(null);
 
@@ -101,7 +103,7 @@ const FilterComponent = ({ postType = "post", setFilterMenu, setPoiField }) => {
         {(type === "place" || type === "post") && (
           <div className="wrap-duo">
             <label>Location</label>
-            <input type="text" ref={poiRef} value={location} onChange={(e) => setLocation(e.target.value)} className="filter-item" id="poi" />
+            <input type="text" ref={poiRef} value={location} lat = {lat} lng = {lng} onChange={(e) => setLocation(e.target.value)} className="filter-item" id="poi" />
             <input type="hidden" id="poi-lat" />
             <input type="hidden" id="poi-lng" />
           </div>

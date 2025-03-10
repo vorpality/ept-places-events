@@ -29,15 +29,15 @@ document.addEventListener('DOMContentLoaded', () => {
       var lat = 0;
       var lng = 0;
       if (locationCookie=='set') {
+
         try {
-            lat = getCookie('location.lat');
-            lng = getCookie('location.lng');
+            poiField.setAttribute("lat", parseFloat(getCookie('location.lat')));
+            poiField.setAttribute("lng", parseFloat(getCookie('location.lng')));
         } catch (error) {
             varconsole.error("Error parsing location cookie:", error);
         }
       }
       var autocomplete;
-      console.log(lat);
       if (poiField != null) {
         var geocoder;
         var script = document.createElement('script');
@@ -54,12 +54,10 @@ document.addEventListener('DOMContentLoaded', () => {
           })
         }
         poiField.addEventListener( 'change', async event => {
-          var lat = document.getElementById('poi-lat');
-          var lng = document.getElementById('poi-lng');
           await geocoder.geocode({ address: poiField.value }, function (results, status){
             if (status ==='OK' && results.length > 0){
-              lat = results[0].geometry.location.lat(),
-              lng = results[0].geometry.location.lng()
+              poiField.setAttribute("lat", results[0].geometry.location.lat()),
+              poiField.setAttribute("lng",  results[0].geometry.location.lng())
             };
           })
       
@@ -69,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const {AdvancedMarkerElement} = await google.maps.importLibrary("marker")
           const map = new google.maps.Map(document.getElementById('map-canvas'), {
             mapId : 'select-place-map',
-            center: { lat: parseFloat(lat), lng: parseFloat(lng) }, // Default location
+            center: { lat: parseFloat(poiField.getAttribute("lat")), lng: parseFloat(poiField.getAttribute("lng")) }, // Default location
             zoom: 12,
           });
         })
