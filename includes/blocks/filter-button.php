@@ -3,9 +3,7 @@ function ept_pe_filter_button_render_cb($atts){
   ob_start();
   ?>
   <div class="wp-block-ept-pe-filter-button">
-    <button class = "filter-button">
-      <i class="bi bi-funnel"></i>
-    </button>
+
     <div id="filter-root">
     <?php
       
