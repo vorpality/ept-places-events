@@ -78,7 +78,7 @@ const FilterComponent = ({ postType = "post" }) => {
     const queryArgs = {
       order,
       location: { lat, lng },
-      type,
+      distance,
       date,
       post_type: postType,
     };
@@ -160,7 +160,7 @@ const FilterComponent = ({ postType = "post" }) => {
             </div>
           )}
 
-          {postType === 'place' && (
+          {(postType === "place" || type === "post") && (
             <div className="wrap-duo">
               <label>Distance</label>
               <input type="text" value={distance} onChange={(e) => setDistance(e.target.value)} className="filter-item" />
