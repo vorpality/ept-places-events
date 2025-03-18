@@ -167,7 +167,7 @@ const FilterComponent = ({ postType = "post" }) => {
             </div>
           )}
 
-          <button className="apply-button" type="submit">Apply</button>
+          <button className="apply-button" type="submit" onClick={closeMenu}>Apply</button>
         </form>
       </div>
     </>
