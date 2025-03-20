@@ -39,6 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const sortRoot = createRoot(document.getElementById('sort-root'));
   sortRoot.render(<SortDropdown />);
 
+  const urlParams = new URLSearchParams(window.location.search);
+  document.querySelector("select[name='orderby']").value = urlParams.get("orderby") || "relevance";
+  document.querySelector("select[name='post_type']").value = urlParams.get("post_type") || "post";
+
 
 });
 

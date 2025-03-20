@@ -10,7 +10,17 @@ function ept_pe_query_render_cb($atts) {
   $category = '';
   $queryType = $atts['queryType'];
   $view = $atts['view'];
+  $lat = 0;
+  $lng = 0;
 
+  if (isset($_COOKIE['location.lat']) && isset($_COOKIE['location.lng'])) {
+    $lat = $_COOKIE['location.lat'];
+    $lng = $_COOKIE['location.lng'];
+
+    // Optionally sanitize them
+    $lat = filter_var($lat, FILTER_VALIDATE_FLOAT);
+    $lng = filter_var($lng, FILTER_VALIDATE_FLOAT);
+  }
   $searchTerms = (isset($_GET["s"])) ? $_GET['s'] : '' ;
   $order = isset($_GET['orderby']) ? $_GET['orderby'] : '';
 
@@ -28,29 +38,22 @@ function ept_pe_query_render_cb($atts) {
 
   switch ($view){
     case ("favorites view"):
-      if (isset($preElim)){
-        usort($favoriteIDs, function($a, $b) use ($preElim) {
-          $posA = array_search($a, $preElim);
-          $posB = array_search($b, $preElim);
-      
-          if ($posA === $posB) {
-              return 0;
-          }
-      
-          return ($posA < $posB) ? -1 : 1;
-      });
-      }
       $place_args = [
-        'post__in'=> $favoriteIDs,
         'post_type' => 'place',
         'posts_per_page' => $atts['count'],
-        'orderby' => 'post__in'
+        'lat' => $lat,
+        'lng' => $lng,
+        'is_favorite' => true,
+        'orderby' => $order
       ];
       
       $event_args = [
-        'post__in'=> $favoriteIDs,
         'post_type' => 'event',
         'posts_per_page' => $atts['count'],
+        'lat' => $lat,
+        'lng' => $lng,
+        'is_favorite' => true,
+        'orderby' => $order
       ];
 
       break;
@@ -87,6 +90,7 @@ function ept_pe_query_render_cb($atts) {
 
       $place_args = [
         'post_type' => 'place',
+        'is_favorite' => true,
         'posts_per_page' => $atts['count'],
         'cat' => $category,
         's' => $searchTerms

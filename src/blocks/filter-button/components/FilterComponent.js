@@ -71,7 +71,7 @@ const FilterComponent = ({ postType = "post" }) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-
+/*
   const applyFilters = async (event) => {
     event.preventDefault();
 
@@ -99,6 +99,37 @@ const FilterComponent = ({ postType = "post" }) => {
       });
 
       console.log("Filter Query:", queryArgs);
+      console.log("Filtered Posts:", posts);
+    } catch (error) {
+      console.error('Error fetching filtered posts:', error);
+    }
+  };
+*/
+  const applyFilters = async (event) => {
+    event.preventDefault();
+  
+    const queryParams = new URLSearchParams(window.location.search);
+    queryParams.set('orderby', order);
+    queryParams.set('post_type', type);
+    if (location) {
+      queryParams.set('location', JSON.stringify({ lat, lng }));
+    }
+    if (distance) {
+      queryParams.set('distance', distance);
+    }
+    if (date) {
+      queryParams.set('date', date);
+    }
+  
+    // Update URL without reloading
+    window.history.pushState({}, '', `?${queryParams.toString()}`);
+    
+    try {
+      const posts = await apiFetch({
+        path: "ept/v1/filter-posts",
+        method: 'POST',
+        data: Object.fromEntries(queryParams.entries()),
+      });
       console.log("Filtered Posts:", posts);
     } catch (error) {
       console.error('Error fetching filtered posts:', error);
@@ -167,7 +198,7 @@ const FilterComponent = ({ postType = "post" }) => {
             </div>
           )}
 
-          <button className="apply-button" type="submit" onClick={closeMenu}>Apply</button>
+          <button className="apply-button" type="submit" onClick={applyFilters}>Apply</button>
         </form>
       </div>
     </>
