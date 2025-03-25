@@ -7,7 +7,7 @@ function ept_modify_query_for_distance_filtering($query) {
   // Extract parameters from the query
   $orderBy = isset($query->query_vars['orderby']) ? $query->query_vars['orderby'] : '';
   $location = isset($query->query_vars['location']) ? $query->query_vars['location'] : null;
-  $maxDistance = isset($query->query_vars['distance']) ? floatval($query->query_vars['distance']) * 1000 : 0;
+  $maxDistance = isset($query->query_vars['distance']) ? floatval($query->query_vars['distance']) * 1000 : 99999999;
   $isFavorite = isset($query->query_vars['is_favorite']) ? filter_var($query->query_vars['is_favorite'], FILTER_VALIDATE_BOOLEAN) : false;
 
   // If no location is set, we don't modify the query
@@ -44,7 +44,32 @@ function ept_modify_query_for_distance_filtering($query) {
             return $orderby;
         }, 10, 2);
     }
-  }
+    add_filter('posts_clauses', function ($clauses, $wp_query) use ($userLat, $userLng, $wpdb) {
+      // Check if we're filtering by location
+      if ($wp_query->get('location')) {
+          // Add the distance to the SELECT clause
+          $clauses['fields'] .= ", ST_Distance_Sphere(POINT($userLat, $userLng), 
+          (SELECT location FROM {$wpdb->prefix}post_locations WHERE post_id = {$wpdb->posts}.ID LIMIT 1)) AS distance";
+          
+          // Add ordering by distance to the ORDER BY clause
+          $clauses['orderby'] = 'distance ASC'; // Order by the calculated distance
+      }
+      return $clauses;
+  }, 10, 2);
+
+  // You can now access the distance in the query results.
+  add_filter('the_posts', function ($posts, $wp_query) {
+      if ($wp_query->get('location')) {
+          foreach ($posts as $post) {
+              // Adding distance to post data
+              $post->distance = isset($post->distance) ? $post->distance : null;
+          }
+      }
+      return $posts;
+  }, 10, 2);
+    }
+
+  
 
   // Modify the query to show only favorite posts if requested
 
@@ -69,4 +94,36 @@ function ept_modify_query_for_distance_filtering($query) {
   });
 }
 
-add_action('pre_get_posts', 'ept_modify_query_for_distance_filtering');
+function ept_modify_query_for_post_grouping($groupby, $query){
+
+  if (isset($query->query_vars['post_type']) && is_array($query->query_vars['post_type'])) {
+    global $wpdb;
+    $groupby = "{$wpdb->posts}.post_type, {$wpdb->posts}.ID";
+  }
+  return $groupby;
+}
+
+
+function ept_add_distance_column($sql) {
+  global $wpdb;
+
+  // Ensure this is only for 'place' post type and location filter is applied
+      // Check if the location is provided
+      if (isset($_GET['location']) && isset($_GET['location']['lat']) && isset($_GET['location']['lng'])) {
+          $userLat = floatval($_GET['location']['lat']);
+          $userLng = floatval($_GET['location']['lng']);
+
+          // Add the distance calculation as a new column in SELECT clause
+          $sql = preg_replace(
+              '/SELECT(.*?)FROM/',
+              "SELECT {$wpdb->posts}.*, 
+              ST_Distance_Sphere(POINT($userLat, $userLng), 
+                  (SELECT meta_value FROM {$wpdb->postmeta} WHERE post_id = {$wpdb->posts}.ID AND meta_key = 'lat' LIMIT 1), 
+                  (SELECT meta_value FROM {$wpdb->postmeta} WHERE post_id = {$wpdb->posts}.ID AND meta_key = 'lng' LIMIT 1)) AS distance,",
+              $sql
+          );
+      }
+  
+
+  return $sql;
+}

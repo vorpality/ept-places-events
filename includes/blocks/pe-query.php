@@ -13,9 +13,9 @@ function ept_pe_query_render_cb($atts) {
   $lat = 0;
   $lng = 0;
 
-  if (isset($_COOKIE['location.lat']) && isset($_COOKIE['location.lng'])) {
-    $lat = $_COOKIE['location.lat'];
-    $lng = $_COOKIE['location.lng'];
+  if (isset($_COOKIE['location']) && $_COOKIE['location']=="set") {
+    $lat = $_COOKIE['location_lat'];
+    $lng = $_COOKIE['location_lng'];
 
     // Optionally sanitize them
     $lat = filter_var($lat, FILTER_VALIDATE_FLOAT);
@@ -24,10 +24,6 @@ function ept_pe_query_render_cb($atts) {
   $searchTerms = (isset($_GET["s"])) ? $_GET['s'] : '' ;
   $order = isset($_GET['orderby']) ? $_GET['orderby'] : '';
 
-  $preElim = [];
-  if ($order == 'distance'){
-    $preElim = sort_places();
-  }
 
   if ($showTitle){
     $heading = substr(get_the_archive_title(),10);
@@ -38,104 +34,68 @@ function ept_pe_query_render_cb($atts) {
 
   switch ($view){
     case ("favorites view"):
-      $place_args = [
-        'post_type' => 'place',
+      $args = [
+        'post_type' => ['place', 'event'],
         'posts_per_page' => $atts['count'],
-        'lat' => $lat,
-        'lng' => $lng,
-        'is_favorite' => true,
-        'orderby' => $order
-      ];
-      
-      $event_args = [
-        'post_type' => 'event',
-        'posts_per_page' => $atts['count'],
-        'lat' => $lat,
-        'lng' => $lng,
+        'location' => ['lat' => $lat, 'lng' => $lng],
         'is_favorite' => true,
         'orderby' => $order
       ];
 
       break;
+
     case ("all view"):
-      $place_args = [
-        'post__in' => $preElim,
-        'post_type' => 'place',
+      $args = [
+        'post_type' => ['place', 'event'],
         'posts_per_page' => $atts['count'],
-        'orderby' => 'post__in'
+        'location' => ['lat' => $lat, 'lng' => $lng],
+        'orderby' => $order
       ];
-      $event_args =[
-        'post__in' => $preElim,
-        'post_type' => 'event',
-        'posts_per_page' => $atts['count'],
-        'orderby' => 'post__in'
-      ];
-      if ($order){
-        $place_args += [
-          'post__in' => $preElim,
-          'orderby' => 'post_in'
-        ];
-        $event_args += [
-          'post__in' => $preElim,
-          'orderby' => 'post_in'
-        ];
-      }
-      break;
+    break;
+
     case ("normal view"):
       $categoryIDs = array_map(function($term) {
         return $term['id'];
       }, $atts['categories']);
 
-
-
-      $place_args = [
-        'post_type' => 'place',
-        'is_favorite' => true,
+      $args = [
+        'post_type' => ['place', 'event'],
         'posts_per_page' => $atts['count'],
+        'location' => ['lat' => $lat, 'lng' => $lng],
         'cat' => $category,
-        's' => $searchTerms
+        's' => $searchTerms,
+        'orderby' => $order
       ];
 
-      $event_args = [
-        'post_type' => 'event',
-        'posts_per_page' => $atts['count'],
-        'cat' => $category,
-        's' => $searchTerms
-      ];
-      if ($order){
-        $place_args += [
-          'post__in' => $preElim,
-          'orderby' => 'post_in'
-        ];
-        $event_args += [
-          'post__in' => $preElim,
-          'orderby' => 'post_in'
-        ];
-      }
       if (!empty($categoryIDs)) {
         foreach($categoryIDs as $cat)
-          $place_args['cat'] .= $cat .',' ;
-          $event_args['cat'] .= $cat .',' ;
+          $args['cat'] .= $cat .',' ;
       }
+
 
       break;
   }
 
+ 
+  $query = new WP_Query($args);
+  if ($query->have_posts()) {
+    foreach ($query->posts as $post) {
+        $grouped_posts[$post->post_type][] = $post; // Group by post type
+    }
+  }
+  wp_reset_postdata(); 
   ob_start(); ?>
   <div class="wp-block-ept-pe-query"> 
     <div id = 'sort-root'></div> <?php
-  if ($queryType == 'places' || $queryType == 'both'){
-    $query = new WP_Query($place_args);
-    if($query->have_posts()) {
+    if (!empty($grouped_posts['place'])){
     ?>
       <div class="inner-page-header">
         <h1><?php _e('Places', 'e-potis'); ?></h1> 
       </div> 
       <div class="posts">
         <?php 
-          while($query->have_posts()) {
-            $query->the_post();
-            $postID = get_the_ID();
+          foreach($grouped_posts['place'] as $post) {
+            $postID = $post->ID;
             $location = get_post_meta($postID,'place_location',true);
             if ($location != ''){
               $location_string_parts = explode(", ", trim($location, "()"));
@@ -177,41 +137,48 @@ function ept_pe_query_render_cb($atts) {
                 </div>
               </div>
               <div class ="single-post-detail">
-                <a class ="post-title" href="<?php the_permalink(); ?>">
-                  <?php the_title(); ?>
+                <a class ="post-title" href="<?php echo(get_permalink($postID)); ?>">
+                  <?php echo($post->post_title); ?>
                 </a>
                 <div class = "button-aligner">
                   <div class = "place-info">
                     <span class="place-location">
                       <?php  _e("Location : ",'e-potis'); echo($location); ?>
                     </span>
+                    <br>
+                    <span class="place-location">
+                      <?php 
+                      $distance = $post->distance;
+                      if ($distance >1000) {
+                        _e("Distance : ",'e-potis'); echo(round($post->distance/1000,1) . " km" ); 
+                      } 
+                      else {
+                      _e("Distance : ",'e-potis'); echo(round($post->distance,0) . " m" ); 
+                      }?>
                   </div>
                 </div>
               </div>
             </div>
             <?php
           } 
-        }
+        
         ?>
       </div>
-      <?php wp_reset_postdata(); 
-  }
-  if ($queryType == 'events' || $queryType == 'both'){
-      $query = new WP_Query($event_args);
-      if($query->have_posts()) {
+      <?php 
+    }
+      if(!empty($grouped_posts['event'])){
       ?>
     <div class="inner-page-header">
       <h1><?php _e('Events', 'e-potis'); ?></h1> 
     </div> 
     <div class="posts">
       <?php 
-        while($query->have_posts()) {
-          $query->the_post();
-          $postID = get_the_ID();
+        foreach($grouped_posts['event'] as $post) {
+          $postID = $post->ID;
           $date = get_post_meta($postID,'event_date',true);
-          
+          $title =  get_the_title($postID);
           $placeID = get_post_meta($postID, 'event_location', true);
-          if (!$placeID == '') {
+          if (!$postID == '') {
             $placeTitle = get_the_title($placeID);
             $placeUrl = get_permalink($placeID);
           }
@@ -255,8 +222,8 @@ function ept_pe_query_render_cb($atts) {
               </div>
             </div>
             <div class ="single-post-detail">
-              <a class ="post-title" href="<?php the_permalink(); ?>">
-                <?php the_title(); ?>
+              <a class ="post-title" href="<?php echo(get_permalink($postID)); ?>">
+                <?php echo(get_the_title($postID)); ?>
               </a>
                   <span class="event-date">
                     <?php  _e("Date : ",'e-potis'); echo($date); ?>
@@ -270,14 +237,12 @@ function ept_pe_query_render_cb($atts) {
             </div>
           </div>
           <?php
-        }
       }
+    }
       ?>
     </div>
-  </div>
   <?php
-  wp_reset_postdata();
-  }
+      
   $output = ob_get_contents();
   ob_end_clean();
 
