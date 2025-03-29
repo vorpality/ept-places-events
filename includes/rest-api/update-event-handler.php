@@ -82,6 +82,8 @@ function ept_pe_rest_api_update_event_handler($request){
     $event_post['ID'] = $request->get_param('post_id');
     $post_id = wp_update_post($event_post);
   }
+  print_r([$post_id, $place_id]);
+  exit();
   update_event_location($post_id, $place_id);
 
   if ($post_id == 0) {

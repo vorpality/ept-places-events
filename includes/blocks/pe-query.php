@@ -155,6 +155,7 @@ function ept_pe_query_render_cb($atts) {
                       else {
                       _e("Distance : ",'e-potis'); echo(round($post->distance,0) . " m" ); 
                       }?>
+                      </span>
                   </div>
                 </div>
               </div>
@@ -233,7 +234,21 @@ function ept_pe_query_render_cb($atts) {
                     <a href = "<?php echo($placeUrl); ?>">
                       <?php echo($placeTitle); ?>
                     </a>
-                  </span>
+                  </span> <?php
+                  $distance = $post->distance;
+                  if ($distance != null){ ?>
+                    <span class="event-location">
+                        <?php 
+                        
+                        
+                        if ($distance >1000) {
+                          _e("Distance : ",'e-potis'); echo(round($post->distance/1000,1) . " km" ); 
+                        } 
+                        else{
+                        _e("Distance : ",'e-potis'); echo(round($post->distance,0) . " m" ); 
+                        }?>
+                    </span> <?php
+                  } ?>
             </div>
           </div>
           <?php
