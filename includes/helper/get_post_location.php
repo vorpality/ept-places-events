@@ -18,7 +18,7 @@ function get_location($postID) {
     $placeID = $postID; // For places, the place ID is the post ID
   }
   $query = $wpdb->prepare(
-      "SELECT ST_AsText(location) AS location FROM {$wpdb->prefix}post_locations WHERE post_id = %d",
+      "SELECT ST_AsText(location) AS location FROM {$wpdb->prefix}place_locations WHERE post_id = %d",
       $placeID
   );
 

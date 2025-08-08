@@ -22,6 +22,8 @@ define('EPT_PE_PLUGIN_FILE', __FILE__);
 $rootFiles = glob(EPT_PE_PLUGIN_DIR . 'includes/*.php');
 $subDirectoryFiles = glob(EPT_PE_PLUGIN_DIR . 'includes/**/*.php');
 $subSubDirectoryFiles = glob(EPT_PE_PLUGIN_DIR . 'includes/**/**/*.php');
+//$subSubSubDirectoryFiles = glob(EPT_PE_PLUGIN_DIR . 'includes/**/**/**/*.php');
+
 $allFiles = array_merge($rootFiles, $subDirectoryFiles, $subSubDirectoryFiles);
 
 foreach($allFiles as $filename){
@@ -39,15 +41,7 @@ add_action('rest_api_init', 'ept_pe_rest_api_init');
 add_action('admin_enqueue_scripts', 'ept_pe_admin_enqueue');
 add_action('wp_enqueue_scripts', 'ept_pe_enqueue_scripts');
 add_action('transition_post_status', 'ept_pe_publish_custom_post_meta',10,3);
-add_action('pre_get_posts', 'ept_modify_query_for_distance_filtering');
+add_action('pre_get_posts', 'ept_pe_modify_query');
 add_action('save_post', 'ept_auto_assign_categories_on_save');
 add_filter('posts_groupby', 'ept_modify_query_for_post_grouping', 10, 2);
-
-//add_filter('posts_request', 'ept_add_distance_column');
-
-add_filter('template_include', 'load_custom_taxonomy_template');
-    // Log the final SQL query
-    add_filter('posts_request', function ($sql) {
-        error_log("Generated SQL Query: " . $sql); // Logs to debug.log
-        return $sql;
-    });
+add_filter('query_vars', 'ept_add_vars_to_query_vars');

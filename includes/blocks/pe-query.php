@@ -148,12 +148,12 @@ function ept_pe_query_render_cb($atts) {
                     <br>
                     <span class="place-location">
                       <?php 
-                      $distance = $post->distance;
+                      $distance = isset($post->distance) ? $post->distance : 0;
                       if ($distance >1000) {
-                        _e("Distance : ",'e-potis'); echo(round($post->distance/1000,1) . " km" ); 
+                        _e("Distance : ",'e-potis'); echo(round($distance/1000,1) . " km" ); 
                       } 
                       else {
-                      _e("Distance : ",'e-potis'); echo(round($post->distance,0) . " m" ); 
+                      _e("Distance : ",'e-potis'); echo(round($distance,0) . " m" ); 
                       }?>
                       </span>
                   </div>
@@ -233,20 +233,14 @@ function ept_pe_query_render_cb($atts) {
                   <?php  _e("Location : ",'e-potis'); ?>
                     <a href = "<?php echo($placeUrl); ?>">
                       <?php echo($placeTitle); ?>
-                    </a>
-                  </span> <?php
-                  $distance = $post->distance;
-                  if ($distance != null){ ?>
-                    <span class="event-location">
-                        <?php 
-                        
-                        
-                        if ($distance >1000) {
-                          _e("Distance : ",'e-potis'); echo(round($post->distance/1000,1) . " km" ); 
-                        } 
-                        else{
-                        _e("Distance : ",'e-potis'); echo(round($post->distance,0) . " m" ); 
-                        }?>
+                    </a> <br>
+                  <span class="event-distance"> <?php
+                    $distance = isset($post->distance) ? $post->distance : 0;
+                    if ($distance >1000) {
+                      _e("Distance : ",'e-potis'); echo(round($distance/1000,1) . " km" ); 
+                    } 
+                    else {
+                      _e("Distance : ",'e-potis'); echo(round($distance,0) . " m" ); ?>
                     </span> <?php
                   } ?>
             </div>

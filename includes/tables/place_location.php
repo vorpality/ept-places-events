@@ -1,7 +1,7 @@
 <?php
-function ept_create_post_locations_table() {
+function ept_create_place_locations_table() {
   global $wpdb;
-  $table_name = $wpdb->prefix . 'post_locations';
+  $table_name = $wpdb->prefix . 'place_locations';
   $charset_collate = $wpdb->get_charset_collate();
   
   $sql = "CREATE TABLE IF NOT EXISTS $table_name (
@@ -14,29 +14,56 @@ function ept_create_post_locations_table() {
   $wpdb->query($sql);
 }
 
-function ept_add_foreign_keys_to_post_locations_table() {
-  global $wpdb;
-  $table_name = $wpdb->prefix . 'post_locations';
+function ept_add_foreign_keys_to_place_locations_table() {
+    global $wpdb;
 
-  $fk_exists = $wpdb->get_var("SELECT CONSTRAINT_NAME FROM information_schema.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = '$table_name' AND CONSTRAINT_NAME = 'fk_post_locations_post_id'");
-  
-  $sql = "";
+    $table_place_locations = $wpdb->prefix . 'place_locations';
+    $table_events_places   = $wpdb->prefix . 'events_places';
+    $table_posts           = $wpdb->prefix . 'posts';
 
-  if (!$fk_exists){
-    $sql.= "ALTER TABLE $table_name
-    ADD CONSTRAINT fk_post_locations_post_id FOREIGN KEY (post_id) REFERENCES {$wpdb->prefix}posts(ID) ON DELETE CASCADE;";
-  }
+    $sql = '';
 
-  if (!empty($sql)) {
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-    $wpdb->query($sql);
-  }
+    // 1. Foreign key: place_locations.post_id → posts.ID
+    $fk1_exists = $wpdb->get_var("
+        SELECT CONSTRAINT_NAME 
+        FROM information_schema.KEY_COLUMN_USAGE 
+        WHERE TABLE_SCHEMA = DATABASE() 
+          AND TABLE_NAME = '{$table_place_locations}'
+          AND CONSTRAINT_NAME = 'fk_place_locations_post_id'
+    ");
+
+    if (!$fk1_exists) {
+        $sql .= "ALTER TABLE {$table_place_locations}
+                 ADD CONSTRAINT fk_place_locations_post_id
+                 FOREIGN KEY (post_id) REFERENCES {$table_posts}(ID) ON DELETE CASCADE;";
+    }
+
+    // 2. Foreign key: events_places.place_id → place_locations.post_id
+    $fk2_exists = $wpdb->get_var("
+        SELECT CONSTRAINT_NAME 
+        FROM information_schema.KEY_COLUMN_USAGE 
+        WHERE TABLE_SCHEMA = DATABASE() 
+          AND TABLE_NAME = '{$table_events_places}'
+          AND CONSTRAINT_NAME = 'fk_events_places_place_id'
+    ");
+
+    if (!$fk2_exists) {
+        $sql .= "ALTER TABLE {$table_events_places}
+                 ADD CONSTRAINT fk_events_places_place_id
+                 FOREIGN KEY (place_id) REFERENCES {$table_place_locations}(post_id) ON DELETE CASCADE;";
+    }
+
+    if (!empty($sql)) {
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        $wpdb->query($sql);
+    }
 }
 
 
-function ept_populate_post_locations_table() {
+
+function ept_populate_place_locations_table() {
   global $wpdb;
-  $table_name = $wpdb->prefix . 'post_locations';
+  $table_name = $wpdb->prefix . 'place_locations';
 
   $posts = get_posts(['post_type' => 'any', 'numberposts' => -1, 'meta_query' => [
       'relation' => 'AND',
