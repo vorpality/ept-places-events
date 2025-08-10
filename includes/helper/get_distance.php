@@ -26,13 +26,13 @@ function get_distance($postID) {
   }
 
   // The name of the table where places' locations are stored
-  $table_name = $wpdb->prefix . 'post_locations';
+  $table_name = $wpdb->prefix . 'place_locations';
 
   // Query to calculate the distance between user location and place location
   $query = $wpdb->prepare("
     SELECT ST_Distance_Sphere(POINT(%f, %f), pl.location) AS distance
     FROM {$wpdb->prefix}posts p
-    LEFT JOIN {$wpdb->prefix}post_locations pl ON p.ID = pl.post_id
+    LEFT JOIN {$wpdb->prefix}place_locations pl ON p.ID = pl.post_id
     LEFT JOIN {$wpdb->prefix}events_places ep ON p.ID = ep.event_id
     WHERE p.ID = {$placeID}
   ", $userLat, $userLng);
@@ -64,13 +64,13 @@ function calculate_distance($postID, $userLat, $userLng) {
   }
 
   // The name of the table where places' locations are stored
-  $table_name = $wpdb->prefix . 'post_locations';
+  $table_name = $wpdb->prefix . 'place_locations';
 
   // Query to calculate the distance between user location and place location
   $query = $wpdb->prepare("
     SELECT ST_Distance_Sphere(POINT(%f, %f), pl.location) AS distance
     FROM {$wpdb->prefix}posts p
-    LEFT JOIN {$wpdb->prefix}post_locations pl ON p.ID = pl.post_id
+    LEFT JOIN {$wpdb->prefix}place_locations pl ON p.ID = pl.post_id
     LEFT JOIN {$wpdb->prefix}events_places ep ON p.ID = ep.event_id
     WHERE p.ID = {$placeID}
   ", $userLat, $userLng);

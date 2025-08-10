@@ -6,4 +6,8 @@ function ept_pe_admin_enqueue($hook_suffix) {
     wp_enqueue_style('ept_pe_admin');
     }
   }
-}  
+  if ($hook_suffix === 'toplevel_page_json-importer') {
+    wp_enqueue_script('json_importer_script');
+    wp_enqueue_style('json_importer_style');
+  }
+}   

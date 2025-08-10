@@ -85,96 +85,94 @@ function ept_pe_query_render_cb($atts) {
   }
   wp_reset_postdata(); 
   ob_start(); ?>
+
+  <!-- START main container -->
   <div class="wp-block-ept-pe-query"> 
-    <div id = 'sort-root'></div> <?php
-    if (!empty($grouped_posts['place'])){
-    ?>
+    <div id='sort-root'></div> 
+
+    <?php if (!empty($grouped_posts['place'])){ ?>
+      <!-- START Places block -->
       <div class="inner-page-header">
         <h1><?php _e('Places', 'e-potis'); ?></h1> 
       </div> 
       <div class="posts">
-        <?php 
-          foreach($grouped_posts['place'] as $post) {
-            $postID = $post->ID;
-            $location = get_post_meta($postID,'place_location',true);
-            if ($location != ''){
-              $location_string_parts = explode(", ", trim($location, "()"));
-              $location = $location_string_parts[1];
+        <?php foreach($grouped_posts['place'] as $post) {
+          $postID = $post->ID;
+          $location = get_post_meta($postID,'place_location',true);
+          if ($location != ''){
+            $location_string_parts = explode(", ", trim($location, "()"));
+            $location = $location_string_parts[1];
+          }
+          $image_ids = get_post_meta($postID, 'custom_images');
+          $image_urls = [];
+          if (!empty($image_ids)) {
+            if (!is_array($image_ids)) {
+              $image_ids = explode(',', $image_ids);
             }
-            $image_ids = get_post_meta($postID, 'custom_images');
-            $image_urls = [];
-            if (!empty($image_ids)) {
-                if (!is_array($image_ids)) {
-                    $image_ids = explode(',', $image_ids);
-                }
-                $image_ids = array_filter(array_map('intval', $image_ids));
-                $image_urls = array_map(function($id) {
-                    return wp_get_attachment_url($id);
-                }, $image_ids);
-            }
-            
-            $thumbnail = get_post_meta($postID, 'primary_image', true);
-            $thumbnail = ($thumbnail == '')? '' : (int) $thumbnail;
-            
-            if($userID > 0)$isFavorite = in_array(strval($postID),$userFavoritesString) ? true : false ;
-
-            ?>
-            <div class ="single-post" data-image-urls='<?php echo json_encode($image_urls); ?>' data-post-url= '<?php the_permalink();?>'>
-      
-                <div class ="button-data post-buttons"
-                  data-logged-in="<?php echo is_user_logged_in(); ?>"
-                  data-post-id="<?php echo $postID; ?>"
-                  data-user-id="<?php echo $userID; ?>"
-                  data-is-favorite="<?php echo $isFavorite; ?>"
-                >
-                  <button class="heart-button"> 
-                    <i class="bi bi-heart favorite"></i>
-                  </button>
-                </div>
-              <div class ="image-container">
-                <div class ="single-post-image image-root">
-                  <img src="<?php  echo (wp_get_attachment_url($thumbnail)); ?>" alt="">
-                </div>
+            $image_ids = array_filter(array_map('intval', $image_ids));
+            $image_urls = array_map(function($id) {
+              return wp_get_attachment_url($id);
+            }, $image_ids);
+          }
+          
+          $thumbnail = get_post_meta($postID, 'primary_image', true);
+          $thumbnail = ($thumbnail == '')? '' : (int) $thumbnail;
+          
+          if($userID > 0)$isFavorite = in_array(strval($postID),$userFavoritesString) ? true : false ; ?>
+          
+          <!-- START single place post -->
+          <div class="single-post" data-image-urls='<?php echo json_encode($image_urls); ?>' data-post-url='<?php the_permalink($postID);?>'>
+            <div class="button-data post-buttons"
+              data-logged-in="<?php echo is_user_logged_in(); ?>"
+              data-post-id="<?php echo $postID; ?>"
+              data-user-id="<?php echo $userID; ?>"
+              data-is-favorite="<?php echo $isFavorite; ?>"
+            >
+              <button class="heart-button"> 
+                <i class="bi bi-heart favorite"></i>
+              </button>
+            </div>
+            <div class="image-container">
+              <div class="single-post-image image-root">
+                <img src="<?php echo (wp_get_attachment_url($thumbnail)); ?>" alt="">
               </div>
-              <div class ="single-post-detail">
-                <a class ="post-title" href="<?php echo(get_permalink($postID)); ?>">
-                  <?php echo($post->post_title); ?>
-                </a>
-                <div class = "button-aligner">
-                  <div class = "place-info">
-                    <span class="place-location">
-                      <?php  _e("Location : ",'e-potis'); echo($location); ?>
-                    </span>
-                    <br>
-                    <span class="place-location">
-                      <?php 
-                      $distance = isset($post->distance) ? $post->distance : 0;
-                      if ($distance >1000) {
-                        _e("Distance : ",'e-potis'); echo(round($distance/1000,1) . " km" ); 
-                      } 
-                      else {
+            </div>
+            <div class="single-post-detail">
+              <a class="post-title" href="<?php echo(get_permalink($postID)); ?>">
+                <?php echo($post->post_title); ?>
+              </a>
+              <div class="button-aligner">
+                <div class="place-info">
+                  <span class="place-location">
+                    <?php _e("Location : ",'e-potis'); echo($location); ?>
+                  </span>
+                  <br>
+                  <span class="place-location">
+                    <?php 
+                    $distance = isset($post->distance) ? $post->distance : 0;
+                    if ($distance > 1000) {
+                      _e("Distance : ",'e-potis'); echo(round($distance/1000,1) . " km" ); 
+                    } else {
                       _e("Distance : ",'e-potis'); echo(round($distance,0) . " m" ); 
-                      }?>
-                      </span>
-                  </div>
+                    } ?>
+                  </span>
                 </div>
               </div>
             </div>
-            <?php
-          } 
-        
-        ?>
+          </div>
+          <!-- END single place post -->
+        <?php } ?>
       </div>
-      <?php 
-    }
-      if(!empty($grouped_posts['event'])){
-      ?>
-    <div class="inner-page-header">
-      <h1><?php _e('Events', 'e-potis'); ?></h1> 
-    </div> 
-    <div class="posts">
-      <?php 
-        foreach($grouped_posts['event'] as $post) {
+      <!-- END Places block -->
+    <?php } ?>
+
+    <?php if(!empty($grouped_posts['event'])){ ?>
+      <!-- START Events block -->
+      <div class="inner-page-header">
+        <h1><?php _e('Events', 'e-potis'); ?></h1> 
+      </div> 
+      <div class="posts">
+        <?php foreach($grouped_posts['event'] as $post) {
           $postID = $post->ID;
           $date = get_post_meta($postID,'event_date',true);
           $title =  get_the_title($postID);
@@ -182,8 +180,7 @@ function ept_pe_query_render_cb($atts) {
           if (!$postID == '') {
             $placeTitle = get_the_title($placeID);
             $placeUrl = get_permalink($placeID);
-          }
-          else {
+          } else {
             $placeTitle = '';
             $placeUrl = '';
           }
@@ -191,70 +188,73 @@ function ept_pe_query_render_cb($atts) {
           $image_ids = get_post_meta($postID, 'custom_images');
           $image_urls = [];
           if (!empty($image_ids)) {
-              if (!is_array($image_ids)) {
-                  $image_ids = explode(',', $image_ids);
-              }
-              $image_ids = array_filter(array_map('intval', $image_ids));
-              $image_urls = array_map(function($id) {
-                  return wp_get_attachment_url($id);
-              }, $image_ids);
+            if (!is_array($image_ids)) {
+              $image_ids = explode(',', $image_ids);
+            }
+            $image_ids = array_filter(array_map('intval', $image_ids));
+            $image_urls = array_map(function($id) {
+              return wp_get_attachment_url($id);
+            }, $image_ids);
           }
           
           $thumbnail = get_post_meta($postID, 'primary_image', true);
           $thumbnail = ($thumbnail == '')? '' : (int) $thumbnail;
           
-          if($userID > 0)$isFavorite = in_array(strval($postID),$userFavoritesString) ? true : false ;
-          ?>
-          <div class ="single-post" data-image-urls='<?php echo json_encode($image_urls); ?>' data-post-url= '<?php the_permalink();?>'>
-
-            <div class ="button-data post-buttons"
+          if($userID > 0)$isFavorite = in_array(strval($postID),$userFavoritesString) ? true : false ; ?>
+          
+          <!-- START single event post -->
+          <div class="single-post" data-image-urls='<?php echo json_encode($image_urls); ?>' data-post-url='<?php the_permalink($postID);?>'>
+            <div class="button-data post-buttons"
               data-logged-in="<?php echo is_user_logged_in(); ?>"
               data-post-id="<?php echo $postID; ?>"
               data-user-id="<?php echo $userID; ?>"
               data-is-favorite="<?php echo $isFavorite; ?>"
             >
               <button class="heart-button"> 
-                  <i class="bi bi-heart favorite"></i>
+                <i class="bi bi-heart favorite"></i>
               </button>
             </div>
-            <div class ="image-container">
-              <div class ="single-post-image image-root">
-                <img src="<?php  echo (wp_get_attachment_url($thumbnail)); ?>" alt="">
+            <div class="image-container">
+              <div class="single-post-image image-root">
+                <img src="<?php echo (wp_get_attachment_url($thumbnail)); ?>" alt="">
               </div>
             </div>
-            <div class ="single-post-detail">
-              <a class ="post-title" href="<?php echo(get_permalink($postID)); ?>">
+            <div class="single-post-detail">
+              <a class="post-title" href="<?php echo(get_permalink($postID)); ?>">
                 <?php echo(get_the_title($postID)); ?>
               </a>
-                  <span class="event-date">
-                    <?php  _e("Date : ",'e-potis'); echo($date); ?>
-                  </span>
-                  <span class="event-location">
-                  <?php  _e("Location : ",'e-potis'); ?>
-                    <a href = "<?php echo($placeUrl); ?>">
-                      <?php echo($placeTitle); ?>
-                    </a> <br>
-                  <span class="event-distance"> <?php
-                    $distance = isset($post->distance) ? $post->distance : 0;
-                    if ($distance >1000) {
-                      _e("Distance : ",'e-potis'); echo(round($distance/1000,1) . " km" ); 
-                    } 
-                    else {
-                      _e("Distance : ",'e-potis'); echo(round($distance,0) . " m" ); ?>
-                    </span> <?php
-                  } ?>
+              <span class="event-date">
+                <?php _e("Date : ",'e-potis'); echo($date); ?>
+              </span>
+              <span class="event-location">
+                <?php _e("Location : ",'e-potis'); ?>
+                <a href="<?php echo($placeUrl); ?>">
+                  <?php echo($placeTitle); ?>
+                </a> <br>
+              </span>
+              <span class="event-distance">
+                <?php
+                $distance = isset($post->distance) ? $post->distance : 0;
+                if ($distance > 1000) {
+                  _e("Distance : ",'e-potis'); echo(round($distance/1000,1) . " km" ); 
+                } else {
+                  _e("Distance : ",'e-potis'); echo(round($distance,0) . " m" ); 
+                }
+                ?>
+              </span>
             </div>
           </div>
-          <?php
-      }
-    }
-      ?>
-    </div>
+          <!-- END single event post -->
+        <?php } ?>
+      </div>
+      <!-- END Events block -->
+    <?php } ?>
+  </div>
+  <!-- END main container -->
+
   <?php
-      
   $output = ob_get_contents();
   ob_end_clean();
-
 
   return $output;
 }

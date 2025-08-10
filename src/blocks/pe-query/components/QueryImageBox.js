@@ -7,7 +7,7 @@ export const QueryImageBox = ({ imageUrls,postUrl }) => {
 
   useEffect(() => {
     const dotElements = imageUrls.map((_, index) => (
-      <button 
+      <button  
         key={index} 
         className={`bi ${currentImageIndex === index ? 'bi-circle-fill' : 'bi-circle'}`}
         onClick = {() => setCurrentImageIndex(index) }

@@ -4,6 +4,7 @@ export default {
   ...defaultConfig,
   entry: {
     ...defaultConfig.entry(),
-    "admin/index": "./src/admin"
+    'admin/meta-boxes': './src/admin/meta-boxes/index.js',
+    'admin/json-importer': './src/admin/json-importer/index.js',
   }
 }   

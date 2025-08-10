@@ -45,3 +45,5 @@ add_action('pre_get_posts', 'ept_pe_modify_query');
 add_action('save_post', 'ept_auto_assign_categories_on_save');
 add_filter('posts_groupby', 'ept_modify_query_for_post_grouping', 10, 2);
 add_filter('query_vars', 'ept_add_vars_to_query_vars');
+add_action('before_delete_post', 'delete_bar_related_data');
+add_action('admin_menu', 'add_json_menu_page');  

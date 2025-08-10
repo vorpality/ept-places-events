@@ -1,7 +1,7 @@
 <?php
 function update_place_location($post_id, $lat, $lng) {
   global $wpdb;
-  $table_name = $wpdb->prefix . 'post_locations';
+  $table_name = $wpdb->prefix . 'place_locations';
 
 
   // Validate the latitude and longitude
@@ -25,7 +25,7 @@ function update_place_location($post_id, $lat, $lng) {
       // Insert new location
       $insert_result = $wpdb->query(
         $wpdb->prepare(
-            "INSERT INTO $table_name (post_id, location) VALUES (%d, geometry)",
+            "INSERT INTO $table_name (post_id, location) VALUES (%d, ST_GeomFromText(%s))",
             $post_id, $point
         )
     );
